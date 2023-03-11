@@ -1,8 +1,10 @@
 import NextAuth from 'next-auth'
+import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
+  debug: true,
   providers: [
     CredentialsProvider({
       credentials: {
@@ -20,7 +22,10 @@ export default NextAuth({
             mutation: gql`
               mutation ($input: UserLoginMutationInput!) {
                 userLogin(input: $input) {
-                  token
+                  apiToken: token
+                  user {
+                    id
+                  }
                 }
               }
             `,
@@ -35,22 +40,25 @@ export default NextAuth({
             },
           })
 
-          if (!response.data) {
-            return null
-          }
+          if (!response.data) return null
 
-          const user = response.data
-
-          return user
+          return response.data
         } catch (error) {
           console.log(error)
         }
       },
     }),
   ],
+  callbacks: {
+    async jwt(user) {
+      console.log(user)
+      return user
+    },
+  },
   pages: {
     signIn: '/auth/login',
     signOut: '/auth/logout',
-    error: '/auth/error',
   },
-})
+}
+
+export default NextAuth(authOptions)
