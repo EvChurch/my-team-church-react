@@ -1,4 +1,5 @@
-import { alpha, type Shadows } from '@mui/material/styles'
+import { type Shadows, alpha } from '@mui/material/styles'
+
 import palette from './palette'
 
 const color = palette.grey[500]

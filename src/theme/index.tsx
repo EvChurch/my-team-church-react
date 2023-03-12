@@ -1,17 +1,18 @@
-import { type ReactNode, useMemo, type ReactElement } from 'react'
 import { CssBaseline } from '@mui/material'
 import {
   ThemeProvider as MUIThemeProvider,
-  createTheme,
   StyledEngineProvider,
   type ThemeOptions,
+  createTheme,
 } from '@mui/material/styles'
+import { type ReactElement, type ReactNode, useMemo } from 'react'
+
+import customShadows, { type CustomShadows } from './customShadows'
+import GlobalStyles from './globalStyles'
+import componentsOverride from './overrides'
 import palette from './palette'
 import shadows from './shadows'
 import typography from './typography'
-import GlobalStyles from './globalStyles'
-import customShadows, { type CustomShadows } from './customShadows'
-import componentsOverride from './overrides'
 
 interface Props {
   children: ReactNode

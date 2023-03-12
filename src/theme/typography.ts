@@ -1,6 +1,6 @@
 import {
-  type TypographyOptions,
   type CSSProperties,
+  type TypographyOptions,
 } from '@mui/material/styles/createTypography'
 
 export function remToPx(value: string): number {

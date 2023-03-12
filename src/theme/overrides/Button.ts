@@ -1,4 +1,4 @@
-import { alpha, type Components, type Theme } from '@mui/material/styles'
+import { type Components, type Theme, alpha } from '@mui/material/styles'
 
 export default function Button(theme: Theme): Pick<Components, 'MuiButton'> {
   return {

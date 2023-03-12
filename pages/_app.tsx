@@ -1,12 +1,13 @@
-import type { AppProps } from 'next/app'
-import { SessionProvider } from 'next-auth/react'
-import createEmotionCache from '../src/utils/createEmotionCache'
 import { CacheProvider, type EmotionCache } from '@emotion/react'
 import { CssBaseline } from '@mui/material'
-import ThemeProvider from '../src/theme'
+import type { AppProps } from 'next/app'
 import { IBM_Plex_Sans } from 'next/font/google'
+import { SessionProvider } from 'next-auth/react'
 import { DefaultSeo } from 'next-seo'
 import { type ReactElement } from 'react'
+
+import ThemeProvider from '../src/theme'
+import createEmotionCache from '../src/utils/createEmotionCache'
 
 const clientSideEmotionCache = createEmotionCache()
 const ibmPlexSans = IBM_Plex_Sans({

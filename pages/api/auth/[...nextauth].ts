@@ -1,7 +1,8 @@
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
 import NextAuth from 'next-auth'
 import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
+
 import { type UserLoginMutation } from '../../../src/gql/graphql'
 
 export const authOptions: NextAuthOptions = {
