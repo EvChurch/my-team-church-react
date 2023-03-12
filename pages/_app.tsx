@@ -1,5 +1,4 @@
 import { CacheProvider, type EmotionCache } from '@emotion/react'
-import { CssBaseline } from '@mui/material'
 import type { AppProps } from 'next/app'
 import { IBM_Plex_Sans } from 'next/font/google'
 import { SessionProvider } from 'next-auth/react'
@@ -31,7 +30,6 @@ export default function App({
         <SessionProvider session={session}>
           <CacheProvider value={emotionCache}>
             <ThemeProvider>
-              <CssBaseline />
               <Component {...pageProps} />
             </ThemeProvider>
           </CacheProvider>

@@ -53,7 +53,7 @@ export function Login(): ReactElement {
       >
         <Box sx={{ width: 720, py: 12 }}>
           <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-            Hi, Welcome Back
+            Hello Again! 👋
           </Typography>
           <Image src={login} alt="login" priority />
         </Box>
@@ -71,8 +71,12 @@ export function Login(): ReactElement {
         }}
       >
         <Container>
+          <Logo />
           <Typography variant="h4" gutterBottom>
-            Login to My Team
+            Log in to your Account
+          </Typography>
+          <Typography color="textSecondary" gutterBottom>
+            Welcome back! Use your Fluro.io account to log in:
           </Typography>
           {showError && (
             <Alert severity="error">
@@ -148,8 +152,9 @@ export function Login(): ReactElement {
                   fullWidth
                   type="submit"
                   disabled={isSubmitting || !isValid}
+                  size="large"
                 >
-                  Login
+                  Log in
                 </LoadingButton>
               </form>
             )}
