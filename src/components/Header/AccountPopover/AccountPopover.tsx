@@ -9,7 +9,7 @@ import {
   Typography,
 } from '@mui/material'
 import { alpha } from '@mui/material/styles'
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import { type MouseEvent, type ReactElement, useState } from 'react'
 
 const MENU_OPTIONS = [
@@ -114,7 +114,12 @@ export default function AccountPopover(): ReactElement {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleClose} sx={{ m: 1 }}>
+        <MenuItem
+          onClick={() => {
+            void signOut()
+          }}
+          sx={{ m: 1 }}
+        >
           Logout
         </MenuItem>
       </Popover>

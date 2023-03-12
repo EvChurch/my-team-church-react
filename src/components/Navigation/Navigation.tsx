@@ -77,9 +77,7 @@ export default function Navigation({
         <Avatar
           src={
             data?.user.remoteId != null
-              ? `https://api.fluro.io/get/avatar/user/${
-                  data.user.remoteId as string
-                }`
+              ? `https://api.fluro.io/get/avatar/user/${data.user.remoteId}`
               : undefined
           }
         >

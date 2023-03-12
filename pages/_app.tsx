@@ -3,8 +3,9 @@ import type { AppProps } from 'next/app'
 import { IBM_Plex_Sans } from 'next/font/google'
 import { SessionProvider } from 'next-auth/react'
 import { DefaultSeo } from 'next-seo'
-import { type ReactElement } from 'react'
+import { type ReactElement, type ReactNode } from 'react'
 
+import Layout from '../src/components/Layout'
 import ThemeProvider from '../src/theme'
 import createEmotionCache from '../src/utils/createEmotionCache'
 
@@ -16,15 +17,21 @@ const ibmPlexSans = IBM_Plex_Sans({
   subsets: ['latin'],
 })
 
-export type MyAppProps = {
+export interface MyAppProps extends AppProps {
+  Component: AppProps['Component'] & {
+    getLayout?: (page: ReactNode) => ReactElement
+  }
   emotionCache?: EmotionCache
-} & AppProps
+}
 
 export default function App({
   Component,
   emotionCache = clientSideEmotionCache,
   pageProps: { session, ...pageProps },
 }: MyAppProps): ReactElement {
+  const getLayout =
+    Component.getLayout ?? ((page: ReactNode) => <Layout>{page}</Layout>)
+
   return (
     <>
       <DefaultSeo defaultTitle="My Team" titleTemplate="%s | My Team" />
@@ -32,7 +39,7 @@ export default function App({
         <SessionProvider session={session}>
           <CacheProvider value={emotionCache}>
             <ThemeProvider>
-              <Component {...pageProps} />
+              {getLayout(<Component {...pageProps} />)}
             </ThemeProvider>
           </CacheProvider>
         </SessionProvider>
