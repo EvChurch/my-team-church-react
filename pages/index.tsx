@@ -1,4 +1,6 @@
+import { Container, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
+import { useSession } from 'next-auth/react'
 import { NextSeo } from 'next-seo'
 import { type ReactElement, useState } from 'react'
 
@@ -29,6 +31,18 @@ const Main = styled('div')(({ theme }) => ({
 
 export default function Home(): ReactElement {
   const [open, setOpen] = useState(false)
+  const { data } = useSession()
+  const curHr = new Date().getHours()
+  let greeting
+
+  if (curHr < 12) {
+    greeting = 'Good morning'
+  } else if (curHr < 18) {
+    greeting = 'Good afternoon'
+  } else {
+    greeting = 'Good evening'
+  }
+
   return (
     <>
       <NextSeo title="Dashboard" />
@@ -46,7 +60,13 @@ export default function Home(): ReactElement {
           }}
         />
 
-        <Main>hello</Main>
+        <Main>
+          <Container maxWidth="xl">
+            <Typography variant="h4" sx={{ mb: 5 }}>
+              {greeting}, {data?.user.firstName}
+            </Typography>
+          </Container>
+        </Main>
       </StyledRoot>
     </>
   )

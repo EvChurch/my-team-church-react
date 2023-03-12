@@ -27,8 +27,6 @@ const MENU_OPTIONS = [
   },
 ]
 
-// ----------------------------------------------------------------------
-
 export default function AccountPopover(): ReactElement {
   const { data } = useSession()
   const [open, setOpen] = useState<Element | null>(null)
