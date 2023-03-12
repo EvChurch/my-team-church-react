@@ -1,6 +1,8 @@
-import { Theme } from '@mui/material/styles'
+import { type Components, type Theme } from '@mui/material/styles'
 
-export default function Card(theme: Theme) {
+export default function Card(
+  theme: Theme
+): Pick<Components, 'MuiCard' | 'MuiCardHeader' | 'MuiCardContent'> {
   return {
     MuiCard: {
       styleOverrides: {

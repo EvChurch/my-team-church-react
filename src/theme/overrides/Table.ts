@@ -1,6 +1,6 @@
-import { Theme } from '@mui/material/styles'
+import { type Components, type Theme } from '@mui/material/styles'
 
-export default function Table(theme: Theme) {
+export default function Table(theme: Theme): Pick<Components, 'MuiTableCell'> {
   return {
     MuiTableCell: {
       styleOverrides: {

@@ -1,10 +1,13 @@
-import { TypographyOptions } from '@mui/material/styles/createTypography'
+import {
+  type TypographyOptions,
+  type CSSProperties,
+} from '@mui/material/styles/createTypography'
 
-export function remToPx(value: string) {
+export function remToPx(value: string): number {
   return Math.round(parseFloat(value) * 16)
 }
 
-export function pxToRem(value: number) {
+export function pxToRem(value: number): string {
   return `${value / 16}rem`
 }
 
@@ -16,7 +19,7 @@ export function responsiveFontSizes({
   sm: number
   md: number
   lg: number
-}) {
+}): CSSProperties {
   return {
     '@media (min-width:600px)': {
       fontSize: pxToRem(sm),

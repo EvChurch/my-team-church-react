@@ -1,11 +1,12 @@
 import type { AppProps } from 'next/app'
 import { SessionProvider } from 'next-auth/react'
 import createEmotionCache from '../src/utils/createEmotionCache'
-import { CacheProvider, EmotionCache } from '@emotion/react'
+import { CacheProvider, type EmotionCache } from '@emotion/react'
 import { CssBaseline } from '@mui/material'
 import ThemeProvider from '../src/theme'
 import { IBM_Plex_Sans } from 'next/font/google'
 import { DefaultSeo } from 'next-seo'
+import { type ReactElement } from 'react'
 
 const clientSideEmotionCache = createEmotionCache()
 const ibmPlexSans = IBM_Plex_Sans({
@@ -21,7 +22,7 @@ export default function App({
   Component,
   emotionCache = clientSideEmotionCache,
   pageProps: { session, ...pageProps },
-}: MyAppProps) {
+}: MyAppProps): ReactElement {
   return (
     <>
       <DefaultSeo defaultTitle="My Team" titleTemplate="%s | My Team" />

@@ -1,14 +1,20 @@
-import { Alert, Box, Container, Typography } from '@mui/material'
+import {
+  Alert,
+  Box,
+  Container,
+  Typography,
+  TextField,
+  Stack,
+} from '@mui/material'
 import { Logo } from '../Logo'
 import { z } from 'zod'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
 import { Formik } from 'formik'
-import { TextField, Stack } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { signIn } from 'next-auth/react'
 import Image from 'next/image'
 import login from './login.png'
-import { useState } from 'react'
+import { type ReactElement, useState } from 'react'
 import { useRouter } from 'next/router'
 
 const Schema = z.object({
@@ -17,7 +23,7 @@ const Schema = z.object({
   accountSlug: z.string(),
 })
 
-export function Login() {
+export function Login(): ReactElement {
   const [showError, setShowError] = useState(false)
   const { query } = useRouter()
 
@@ -79,9 +85,9 @@ export function Login() {
                 redirect: false,
                 ...values,
               })
-              if (response?.ok) {
+              if (response?.ok === true) {
                 window.location.href =
-                  (query['callback'] as string | undefined) ?? '/'
+                  (query.callback as string | undefined) ?? '/'
               } else {
                 setShowError(true)
               }
@@ -105,7 +111,9 @@ export function Login() {
                     label="Email Address"
                     value={values.username}
                     onChange={handleChange}
-                    error={touched.username && Boolean(errors.username)}
+                    error={
+                      touched.username === true && Boolean(errors.username)
+                    }
                   />
                   <TextField
                     fullWidth
@@ -115,7 +123,9 @@ export function Login() {
                     type="password"
                     value={values.password}
                     onChange={handleChange}
-                    error={touched.password && Boolean(errors.password)}
+                    error={
+                      touched.password === true && Boolean(errors.password)
+                    }
                   />
                   <TextField
                     fullWidth
@@ -124,7 +134,10 @@ export function Login() {
                     label="Account ID"
                     value={values.accountSlug}
                     onChange={handleChange}
-                    error={touched.accountSlug && Boolean(errors.accountSlug)}
+                    error={
+                      touched.accountSlug === true &&
+                      Boolean(errors.accountSlug)
+                    }
                   />
                 </Stack>
                 <LoadingButton

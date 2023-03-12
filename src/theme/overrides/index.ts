@@ -1,4 +1,4 @@
-import { Theme } from '@mui/material/styles'
+import { type Components, type Theme } from '@mui/material/styles'
 import Card from './Card'
 import Paper from './Paper'
 import Input from './Input'
@@ -9,7 +9,7 @@ import Backdrop from './Backdrop'
 import Typography from './Typography'
 import Autocomplete from './Autocomplete'
 
-export default function ComponentsOverrides(theme: Theme) {
+export default function ComponentsOverrides(theme: Theme): Components {
   return Object.assign(
     Card(theme),
     Table(theme),

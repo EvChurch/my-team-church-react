@@ -1,4 +1,4 @@
-import { alpha, createTheme, Palette } from '@mui/material/styles'
+import { alpha, createTheme, type Palette } from '@mui/material/styles'
 
 const GREY = {
   50: '#FAFAFA',

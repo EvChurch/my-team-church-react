@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 import { useTheme } from '@mui/material/styles'
-import { Box, SxProps } from '@mui/material'
+import { Box, type SxProps } from '@mui/material'
 
 export const Logo = forwardRef<HTMLDivElement, { sx?: SxProps }>(
   ({ sx }, ref) => {

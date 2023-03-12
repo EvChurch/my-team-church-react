@@ -1,6 +1,7 @@
 import { GlobalStyles as MUIGlobalStyles } from '@mui/material'
+import { type ReactElement } from 'react'
 
-export default function GlobalStyles() {
+export default function GlobalStyles(): ReactElement {
   const inputGlobalStyles = (
     <MUIGlobalStyles
       styles={{

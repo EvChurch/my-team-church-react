@@ -1,16 +1,16 @@
-import { ReactNode, useMemo } from 'react'
+import { type ReactNode, useMemo, type ReactElement } from 'react'
 import { CssBaseline } from '@mui/material'
 import {
   ThemeProvider as MUIThemeProvider,
   createTheme,
   StyledEngineProvider,
-  ThemeOptions,
+  type ThemeOptions,
 } from '@mui/material/styles'
 import palette from './palette'
 import shadows from './shadows'
 import typography from './typography'
 import GlobalStyles from './globalStyles'
-import customShadows, { CustomShadows } from './customShadows'
+import customShadows, { type CustomShadows } from './customShadows'
 import componentsOverride from './overrides'
 
 interface Props {
@@ -26,7 +26,7 @@ declare module '@mui/material/styles' {
   }
 }
 
-export default function ThemeProvider({ children }: Props) {
+export default function ThemeProvider({ children }: Props): ReactElement {
   const themeOptions = useMemo(
     (): ThemeOptions => ({
       palette,

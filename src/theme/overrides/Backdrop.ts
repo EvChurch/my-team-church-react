@@ -1,6 +1,8 @@
-import { alpha, Theme } from '@mui/material/styles'
+import { alpha, type Components, type Theme } from '@mui/material/styles'
 
-export default function Backdrop(theme: Theme) {
+export default function Backdrop(
+  theme: Theme
+): Pick<Components, 'MuiBackdrop'> {
   return {
     MuiBackdrop: {
       styleOverrides: {
