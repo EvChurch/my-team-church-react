@@ -264,7 +264,16 @@ export type UserLoginMutation = {
   userLogin?: {
     __typename?: 'UserLoginMutationPayload'
     apiToken?: string | null
-    user?: { __typename?: 'User'; id: string } | null
+    user?: {
+      __typename?: 'User'
+      id: string
+      title: string
+      firstName?: string | null
+      lastName?: string | null
+      email?: string | null
+      phoneNumber?: string | null
+      remoteId?: string | null
+    } | null
   } | null
 }
 
@@ -322,6 +331,24 @@ export const UserLoginDocument = {
                     kind: 'SelectionSet',
                     selections: [
                       { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'firstName' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'lastName' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'phoneNumber' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'remoteId' },
+                      },
                     ],
                   },
                 },

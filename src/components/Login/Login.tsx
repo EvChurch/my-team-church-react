@@ -15,7 +15,7 @@ import { type ReactElement, useState } from 'react'
 import { z } from 'zod'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
 
-import { Logo } from '../Logo'
+import Logo from '../Logo'
 
 import login from './login.png'
 
@@ -25,7 +25,7 @@ const Schema = z.object({
   accountSlug: z.string(),
 })
 
-export function Login(): ReactElement {
+export default function Login(): ReactElement {
   const [showError, setShowError] = useState(false)
   const { query } = useRouter()
 

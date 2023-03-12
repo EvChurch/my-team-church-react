@@ -8,6 +8,8 @@ import { type ReactElement } from 'react'
 import ThemeProvider from '../src/theme'
 import createEmotionCache from '../src/utils/createEmotionCache'
 
+import 'simplebar-react/dist/simplebar.min.css'
+
 const clientSideEmotionCache = createEmotionCache()
 const ibmPlexSans = IBM_Plex_Sans({
   weight: ['400', '700'],

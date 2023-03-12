@@ -1,6 +1,5 @@
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
-import NextAuth from 'next-auth'
-import type { NextAuthOptions } from 'next-auth'
+import NextAuth, { type NextAuthOptions, type User } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
 import { type UserLoginMutation } from '../../../src/gql/graphql'
@@ -26,6 +25,12 @@ export const authOptions: NextAuthOptions = {
                 apiToken: token
                 user {
                   id
+                  title
+                  firstName
+                  lastName
+                  email
+                  phoneNumber
+                  remoteId
                 }
               }
             }
@@ -47,6 +52,17 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/auth/login',
     signOut: '/auth/logout',
+  },
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user != null) token.user = user
+      return token
+    },
+    async session({ session, token }) {
+      session.user = token.user as User
+
+      return session
+    },
   },
 }
 
