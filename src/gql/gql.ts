@@ -15,7 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
     "\n            mutation UserLogin($input: UserLoginMutationInput!) {\n              userLogin(input: $input) {\n                apiToken: token\n                user {\n                  id\n                  title\n                  firstName\n                  lastName\n                  email\n                  phoneNumber\n                  remoteId\n                  avatar\n                }\n              }\n            }\n          ": types.UserLoginDocument,
     "\n  query Me {\n    me {\n      id\n      teams {\n        ...TeamListTeamFragment\n      }\n    }\n  }\n": types.MeDocument,
-    "\n  query Team($id: ID!) {\n    team(id: $id) {\n      id\n      title\n    }\n  }\n": types.TeamDocument,
+    "\n  query Team($id: ID!) {\n    team(id: $id) {\n      id\n      title\n      contacts {\n        id\n        avatar\n        firstName\n        lastName\n        title\n      }\n    }\n  }\n": types.TeamDocument,
     "\n  fragment TeamListTeamFragment on Team {\n    id\n    title\n    status\n    definition\n    ...TeamListItemTeamFragment\n  }\n": types.TeamListTeamFragmentFragmentDoc,
     "\n  fragment TeamListItemTeamFragment on Team {\n    id\n    title\n    slug\n    contacts {\n      id\n      title\n      avatar\n      status\n    }\n  }\n": types.TeamListItemTeamFragmentFragmentDoc,
 };
@@ -45,7 +45,7 @@ export function graphql(source: "\n  query Me {\n    me {\n      id\n      teams
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query Team($id: ID!) {\n    team(id: $id) {\n      id\n      title\n    }\n  }\n"): (typeof documents)["\n  query Team($id: ID!) {\n    team(id: $id) {\n      id\n      title\n    }\n  }\n"];
+export function graphql(source: "\n  query Team($id: ID!) {\n    team(id: $id) {\n      id\n      title\n      contacts {\n        id\n        avatar\n        firstName\n        lastName\n        title\n      }\n    }\n  }\n"): (typeof documents)["\n  query Team($id: ID!) {\n    team(id: $id) {\n      id\n      title\n      contacts {\n        id\n        avatar\n        firstName\n        lastName\n        title\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
