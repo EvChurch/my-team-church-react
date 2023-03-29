@@ -75,7 +75,7 @@ export default function Navigation({
       <Divider />
       <StyledAccount>
         <Avatar
-          remoteId={data?.user.remoteId}
+          avatar={data?.user.avatar ?? undefined}
           title={data?.user.title}
           type="user"
         />

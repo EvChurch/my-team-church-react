@@ -62,7 +62,7 @@ export default function AccountPopover(): ReactElement {
         }}
       >
         <Avatar
-          remoteId={data?.user.remoteId}
+          src={data?.user.avatar ?? undefined}
           title={data?.user.title}
           type="user"
         />
