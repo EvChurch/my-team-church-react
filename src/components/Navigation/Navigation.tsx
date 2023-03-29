@@ -1,6 +1,5 @@
 import InsightsRoundedIcon from '@mui/icons-material/InsightsRounded'
 import {
-  Avatar,
   Box,
   Divider,
   Drawer,
@@ -13,6 +12,7 @@ import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { type ReactElement, useEffect } from 'react'
 
+import Avatar from '../Avatar'
 import Logo from '../Logo'
 import Scrollbar from '../Scrollbar'
 
@@ -75,17 +75,10 @@ export default function Navigation({
       <Divider />
       <StyledAccount>
         <Avatar
-          src={
-            data?.user.remoteId != null
-              ? `https://api.fluro.io/get/avatar/user/${data.user.remoteId}`
-              : undefined
-          }
-        >
-          {data?.user.title
-            .split(' ')
-            .map((n) => n[0])
-            .join('')}
-        </Avatar>
+          remoteId={data?.user.remoteId}
+          title={data?.user.title}
+          type="user"
+        />
         <Box sx={{ ml: 2 }}>
           <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
             {data?.user.title}

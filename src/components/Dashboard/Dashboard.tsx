@@ -1,9 +1,26 @@
+import { useQuery } from '@apollo/client'
 import { Container, Typography } from '@mui/material'
 import { useSession } from 'next-auth/react'
 import { type ReactElement } from 'react'
 
+import { graphql } from '../../gql'
+import { type MeQuery } from '../../gql/graphql'
+import TeamList from '../TeamList'
+
+const MeQueryDocument = graphql(`
+  query Me {
+    me {
+      id
+      teams {
+        ...TeamListTeamFragment
+      }
+    }
+  }
+`)
+
 export default function Dashboard(): ReactElement {
-  const { data } = useSession()
+  const { data: session } = useSession()
+  const { data } = useQuery<MeQuery>(MeQueryDocument)
   const curHr = new Date().getHours()
   let greeting
 
@@ -17,9 +34,10 @@ export default function Dashboard(): ReactElement {
 
   return (
     <Container maxWidth="xl">
-      <Typography variant="h4" sx={{ mb: 5 }}>
-        {greeting}, {data?.user.firstName}
+      <Typography variant="h2" sx={{ mb: 5 }}>
+        {greeting}, {session?.user.firstName}
       </Typography>
+      {data?.me.teams != null && <TeamList teams={data.me.teams} />}
     </Container>
   )
 }

@@ -5,6 +5,7 @@ import {
   type ThemeOptions,
   createTheme,
 } from '@mui/material/styles'
+import { IBM_Plex_Sans } from 'next/font/google'
 import { type ReactElement, type ReactNode, useMemo } from 'react'
 
 import customShadows, { type CustomShadows } from './customShadows'
@@ -13,6 +14,13 @@ import componentsOverride from './overrides'
 import palette from './palette'
 import shadows from './shadows'
 import typography from './typography'
+
+import 'simplebar-react/dist/simplebar.min.css'
+
+const ibmPlexSans = IBM_Plex_Sans({
+  weight: ['400', '700'],
+  subsets: ['latin'],
+})
 
 interface Props {
   children: ReactNode
@@ -47,7 +55,7 @@ export default function ThemeProvider({ children }: Props): ReactElement {
       <MUIThemeProvider theme={theme}>
         <CssBaseline />
         <GlobalStyles />
-        {children}
+        <main className={ibmPlexSans.className}>{children}</main>
       </MUIThemeProvider>
     </StyledEngineProvider>
   )

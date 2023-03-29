@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Box,
   Divider,
   IconButton,
@@ -11,6 +10,8 @@ import {
 import { alpha } from '@mui/material/styles'
 import { signOut, useSession } from 'next-auth/react'
 import { type MouseEvent, type ReactElement, useState } from 'react'
+
+import Avatar from '../../Avatar'
 
 const MENU_OPTIONS = [
   {
@@ -61,17 +62,10 @@ export default function AccountPopover(): ReactElement {
         }}
       >
         <Avatar
-          src={
-            data?.user.remoteId != null
-              ? `https://api.fluro.io/get/avatar/user/${data.user.remoteId}`
-              : undefined
-          }
-        >
-          {data?.user.title
-            .split(' ')
-            .map((n) => n[0])
-            .join('')}
-        </Avatar>
+          remoteId={data?.user.remoteId}
+          title={data?.user.title}
+          type="user"
+        />
       </IconButton>
 
       <Popover

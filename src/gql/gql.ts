@@ -1,6 +1,6 @@
 /* eslint-disable */
-import * as types from './graphql'
-import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core'
+import * as types from './graphql';
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 
 /**
  * Map of all GraphQL operations in the project.
@@ -13,9 +13,12 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-  '\n            mutation UserLogin($input: UserLoginMutationInput!) {\n              userLogin(input: $input) {\n                apiToken: token\n                user {\n                  id\n                  title\n                  firstName\n                  lastName\n                  email\n                  phoneNumber\n                  remoteId\n                }\n              }\n            }\n          ':
-    types.UserLoginDocument,
-}
+    "\n            mutation UserLogin($input: UserLoginMutationInput!) {\n              userLogin(input: $input) {\n                apiToken: token\n                user {\n                  id\n                  title\n                  firstName\n                  lastName\n                  email\n                  phoneNumber\n                  remoteId\n                }\n              }\n            }\n          ": types.UserLoginDocument,
+    "\n  query Me {\n    me {\n      id\n      teams {\n        ...TeamListTeamFragment\n      }\n    }\n  }\n": types.MeDocument,
+    "\n  query Team($id: ID!) {\n    team(id: $id) {\n      id\n      title\n    }\n  }\n": types.TeamDocument,
+    "\n  fragment TeamListTeamFragment on Team {\n    id\n    title\n    status\n    definition\n    ...TeamListItemTeamFragment\n  }\n": types.TeamListTeamFragmentFragmentDoc,
+    "\n  fragment TeamListItemTeamFragment on Team {\n    id\n    title\n    slug\n    contacts {\n      id\n      title\n      avatar\n      status\n    }\n  }\n": types.TeamListItemTeamFragmentFragmentDoc,
+};
 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -29,18 +32,31 @@ const documents = {
  * The query argument is unknown!
  * Please regenerate the types.
  */
-export function graphql(source: string): unknown
+export function graphql(source: string): unknown;
 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(
-  source: '\n            mutation UserLogin($input: UserLoginMutationInput!) {\n              userLogin(input: $input) {\n                apiToken: token\n                user {\n                  id\n                  title\n                  firstName\n                  lastName\n                  email\n                  phoneNumber\n                  remoteId\n                }\n              }\n            }\n          '
-): (typeof documents)['\n            mutation UserLogin($input: UserLoginMutationInput!) {\n              userLogin(input: $input) {\n                apiToken: token\n                user {\n                  id\n                  title\n                  firstName\n                  lastName\n                  email\n                  phoneNumber\n                  remoteId\n                }\n              }\n            }\n          ']
+export function graphql(source: "\n            mutation UserLogin($input: UserLoginMutationInput!) {\n              userLogin(input: $input) {\n                apiToken: token\n                user {\n                  id\n                  title\n                  firstName\n                  lastName\n                  email\n                  phoneNumber\n                  remoteId\n                }\n              }\n            }\n          "): (typeof documents)["\n            mutation UserLogin($input: UserLoginMutationInput!) {\n              userLogin(input: $input) {\n                apiToken: token\n                user {\n                  id\n                  title\n                  firstName\n                  lastName\n                  email\n                  phoneNumber\n                  remoteId\n                }\n              }\n            }\n          "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query Me {\n    me {\n      id\n      teams {\n        ...TeamListTeamFragment\n      }\n    }\n  }\n"): (typeof documents)["\n  query Me {\n    me {\n      id\n      teams {\n        ...TeamListTeamFragment\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query Team($id: ID!) {\n    team(id: $id) {\n      id\n      title\n    }\n  }\n"): (typeof documents)["\n  query Team($id: ID!) {\n    team(id: $id) {\n      id\n      title\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment TeamListTeamFragment on Team {\n    id\n    title\n    status\n    definition\n    ...TeamListItemTeamFragment\n  }\n"): (typeof documents)["\n  fragment TeamListTeamFragment on Team {\n    id\n    title\n    status\n    definition\n    ...TeamListItemTeamFragment\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment TeamListItemTeamFragment on Team {\n    id\n    title\n    slug\n    contacts {\n      id\n      title\n      avatar\n      status\n    }\n  }\n"): (typeof documents)["\n  fragment TeamListItemTeamFragment on Team {\n    id\n    title\n    slug\n    contacts {\n      id\n      title\n      avatar\n      status\n    }\n  }\n"];
 
 export function graphql(source: string) {
-  return (documents as any)[source] ?? {}
+  return (documents as any)[source] ?? {};
 }
 
-export type DocumentType<TDocumentNode extends DocumentNode<any, any>> =
-  TDocumentNode extends DocumentNode<infer TType, any> ? TType : never
+export type DocumentType<TDocumentNode extends DocumentNode<any, any>> = TDocumentNode extends DocumentNode<  infer TType,  any>  ? TType  : never;

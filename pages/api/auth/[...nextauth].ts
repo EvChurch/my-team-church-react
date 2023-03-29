@@ -45,7 +45,13 @@ export const authOptions: NextAuthOptions = {
             },
           },
         })
-        return response.data?.userLogin?.user ?? null
+        if (response.data?.userLogin?.user != null) {
+          return {
+            ...response.data?.userLogin?.user,
+            apiToken: response.data?.userLogin?.apiToken,
+          }
+        }
+        return null
       },
     }),
   ],

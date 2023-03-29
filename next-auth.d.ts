@@ -5,7 +5,9 @@ import { type UserLoginMutation } from './src/gql/graphql'
 
 type GraphUser = NonNullable<
   NonNullable<UserLoginMutation['userLogin']>['user']
->
+> & {
+  apiToken?: string | null
+}
 declare module 'next-auth' {
   /**
    * The shape of the returned object in the OAuth providers' `profile` callback,
