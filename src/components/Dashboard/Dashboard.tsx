@@ -4,7 +4,8 @@ import { useSession } from 'next-auth/react'
 import { type ReactElement } from 'react'
 
 import { graphql } from '../../gql'
-import { type MeQuery } from '../../gql/graphql'
+import { type MeQuery, Status } from '../../gql/graphql'
+import ObjectiveList from '../ObjectiveList'
 import TeamList from '../TeamList'
 
 const MeQueryDocument = graphql(`
@@ -37,6 +38,12 @@ export default function Dashboard(): ReactElement {
       <Typography variant="h2" sx={{ mb: 5 }}>
         {greeting}, {session?.user.firstName}
       </Typography>
+
+      <Typography variant="h4" sx={{ pt: 5, pb: 2 }}>
+        My Goals
+      </Typography>
+      <ObjectiveList status={Status.Active} />
+
       {data?.me.teams != null && <TeamList teams={data.me.teams} />}
     </Container>
   )

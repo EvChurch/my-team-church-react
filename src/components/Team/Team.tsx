@@ -1,16 +1,13 @@
 import { useQuery } from '@apollo/client'
-import { Card, CardContent, Container, Typography, alpha } from '@mui/material'
-import {
-  DataGrid,
-  type GridColDef,
-  type GridRenderCellParams,
-  GridToolbar,
-} from '@mui/x-data-grid'
-import { type ReactElement } from 'react'
+import { TabContext, TabList, TabPanel } from '@mui/lab'
+import { Box, Container, Tab, Typography } from '@mui/material'
+import { type ReactElement, type SyntheticEvent, useState } from 'react'
 
 import { graphql } from '../../gql'
 import { type TeamQuery } from '../../gql/graphql'
-import Avatar from '../Avatar'
+import ObjectiveList from '../ObjectiveList'
+
+import MemberList from './MemberList'
 
 const TeamQueryDocument = graphql(`
   query Team($id: ID!) {
@@ -34,95 +31,33 @@ interface Props {
 
 export default function Team({ id }: Props): ReactElement {
   const { data } = useQuery<TeamQuery>(TeamQueryDocument, { variables: { id } })
+  const [value, setValue] = useState('1')
 
-  const columns: GridColDef[] = [
-    {
-      field: 'avatar',
-      headerName: '',
-      width: 34,
-      renderCell: (
-        params: GridRenderCellParams<
-          TeamQuery['team']['contacts'][number],
-          TeamQuery['team']['contacts'][number]['avatar']
-        >
-      ) => {
-        return (
-          <Avatar
-            src={params.value ?? undefined}
-            title={params.row.title}
-            type="contact"
-            sx={{ width: 34, height: 34, fontSize: '1rem' }}
-          />
-        )
-      },
-      sortable: false,
-      filterable: false,
-      hideable: false,
-      disableColumnMenu: true,
-    },
-    { field: 'firstName', headerName: 'First Name', width: 150 },
-    { field: 'lastName', headerName: 'Last Name', width: 150 },
-  ]
+  const handleChange = (_event: SyntheticEvent, newValue: string): void => {
+    setValue(newValue)
+  }
 
   return (
     <Container maxWidth="xl">
       <Typography variant="h4" gutterBottom>
         {data?.team.title}
       </Typography>
-      <Card>
-        <DataGrid
-          autoHeight
-          disableColumnFilter
-          disableColumnSelector
-          disableDensitySelector
-          slots={{ toolbar: GridToolbar }}
-          slotProps={{
-            toolbar: {
-              sx: {
-                height: 96,
-                display: 'flex',
-                justifyContent: 'space-between',
-                px: 3,
-                flexDirection: 'row-reverse',
-              },
-              showQuickFilter: true,
-              quickFilterProps: {
-                debounceMs: 500,
-                variant: 'outlined',
-                sx: {
-                  '> .MuiInputBase-root': {
-                    width: 240,
-                    transition: (theme) =>
-                      theme.transitions.create(['box-shadow', 'width'], {
-                        easing: theme.transitions.easing.easeInOut,
-                        duration: theme.transitions.duration.shorter,
-                      }),
-                    '&.Mui-focused': {
-                      width: 320,
-                      boxShadow: (theme) => theme.customShadows.z8,
-                    },
-                    '& fieldset': {
-                      borderWidth: `1px !important`,
-                      borderColor: (theme) =>
-                        `${alpha(theme.palette.grey[500], 0.32)} !important`,
-                    },
-                  },
-                },
-              },
-            },
-          }}
-          disableRowSelectionOnClick
-          rows={data?.team.contacts ?? []}
-          columns={columns}
-          sx={{
-            '.MuiDataGrid-columnHeaders': {
-              borderRadius: 0,
-              color: (theme) => theme.palette.text.secondary,
-              backgroundColor: (theme) => theme.palette.background.neutral,
-            },
-          }}
-        />
-      </Card>
+      <Box sx={{ width: '100%', typography: 'body1' }}>
+        <TabContext value={value}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <TabList onChange={handleChange} aria-label="team tabs">
+              <Tab label="Goals" value="1" />
+              <Tab label="Members" value="2" />
+            </TabList>
+          </Box>
+          <TabPanel value="1">
+            <ObjectiveList teamId={id} />
+          </TabPanel>
+          <TabPanel value="2">
+            <MemberList teamId={id} />
+          </TabPanel>
+        </TabContext>
+      </Box>
     </Container>
   )
 }

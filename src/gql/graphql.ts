@@ -50,6 +50,8 @@ export type Contact = {
   id: Scalars['ID'];
   /** contact last name */
   lastName?: Maybe<Scalars['String']>;
+  /** objectives this contact has */
+  objectives: Array<Objective>;
   /** contact's phone numbers */
   phoneNumbers: Array<Scalars['String']>;
   /** realms the contact belongs to */
@@ -68,6 +70,26 @@ export type Contact = {
   updatedAt: Scalars['ISO8601DateTime'];
 };
 
+/** The connection type for Contact. */
+export type ContactConnection = {
+  __typename?: 'ContactConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<ContactEdge>>>;
+  /** A list of nodes. */
+  nodes?: Maybe<Array<Maybe<Contact>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type ContactEdge = {
+  __typename?: 'ContactEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node?: Maybe<Contact>;
+};
+
 /** Base Mutation Type */
 export type Mutation = {
   __typename?: 'Mutation';
@@ -79,6 +101,47 @@ export type Mutation = {
 /** Base Mutation Type */
 export type MutationUserLoginArgs = {
   input: UserLoginMutationInput;
+};
+
+/** objective for a team */
+export type Objective = {
+  __typename?: 'Objective';
+  /** account record belongs to */
+  account: Account;
+  /** contact objective belongs to */
+  contact: Contact;
+  /** time record created */
+  createdAt: Scalars['ISO8601DateTime'];
+  /** record unique identifier */
+  id: Scalars['ID'];
+  /** record status */
+  status?: Maybe<Status>;
+  /** team objective belongs to */
+  team: Team;
+  /** title of record */
+  title: Scalars['String'];
+  /** time record updated */
+  updatedAt: Scalars['ISO8601DateTime'];
+};
+
+/** The connection type for Objective. */
+export type ObjectiveConnection = {
+  __typename?: 'ObjectiveConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<ObjectiveEdge>>>;
+  /** A list of nodes. */
+  nodes?: Maybe<Array<Maybe<Objective>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type ObjectiveEdge = {
+  __typename?: 'ObjectiveEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node?: Maybe<Objective>;
 };
 
 /** Information about pagination in a connection. */
@@ -97,10 +160,36 @@ export type PageInfo = {
 /** Base Query Type */
 export type Query = {
   __typename?: 'Query';
+  /** retrieve contacts */
+  contacts: ContactConnection;
   /** current user */
   me: User;
+  /** retrieve objectives */
+  objectives: ObjectiveConnection;
   /** retrieve team */
   team: Team;
+};
+
+
+/** Base Query Type */
+export type QueryContactsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  status?: InputMaybe<Status>;
+  teamId?: InputMaybe<Scalars['ID']>;
+};
+
+
+/** Base Query Type */
+export type QueryObjectivesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  status?: InputMaybe<Status>;
+  teamId?: InputMaybe<Scalars['ID']>;
 };
 
 
@@ -167,9 +256,11 @@ export type Team = {
   definition: Scalars['String'];
   /** record unique identifier */
   id: Scalars['ID'];
+  /** objectives this team has */
+  objectives: Array<Objective>;
   /** optional parent record */
   parent?: Maybe<Team>;
-  /** realms the contact belongs to */
+  /** realms the team belongs to */
   realms: Array<Realm>;
   /** unique identifier in fluro */
   remoteId?: Maybe<Scalars['String']>;
@@ -280,6 +371,21 @@ export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: str
       & { ' $fragmentRefs'?: { 'TeamListTeamFragmentFragment': TeamListTeamFragmentFragment } }
     )> } };
 
+export type ObjectivesQueryVariables = Exact<{
+  teamId?: InputMaybe<Scalars['ID']>;
+  status?: InputMaybe<Status>;
+}>;
+
+
+export type ObjectivesQuery = { __typename?: 'Query', objectives: { __typename?: 'ObjectiveConnection', nodes?: Array<{ __typename?: 'Objective', createdAt: any, id: string, status?: Status | null, title: string, updatedAt: any, contact: { __typename?: 'Contact', id: string, avatar?: string | null, title: string } } | null> | null } };
+
+export type MembersQueryVariables = Exact<{
+  teamId: Scalars['ID'];
+}>;
+
+
+export type MembersQuery = { __typename?: 'Query', contacts: { __typename?: 'ContactConnection', nodes?: Array<{ __typename?: 'Contact', id: string, avatar?: string | null, firstName?: string | null, lastName?: string | null, title: string } | null> | null } };
+
 export type TeamQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -298,4 +404,6 @@ export const TeamListItemTeamFragmentFragmentDoc = {"kind":"Document","definitio
 export const TeamListTeamFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"TeamListTeamFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Team"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"definition"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"TeamListItemTeamFragment"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"TeamListItemTeamFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Team"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"contacts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"}},{"kind":"Field","name":{"kind":"Name","value":"status"}}]}}]}}]} as unknown as DocumentNode<TeamListTeamFragmentFragment, unknown>;
 export const UserLoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UserLogin"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UserLoginMutationInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userLogin"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"apiToken"},"name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"phoneNumber"}},{"kind":"Field","name":{"kind":"Name","value":"remoteId"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"}}]}}]}}]}}]} as unknown as DocumentNode<UserLoginMutation, UserLoginMutationVariables>;
 export const MeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"teams"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"TeamListTeamFragment"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"TeamListItemTeamFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Team"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"contacts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"}},{"kind":"Field","name":{"kind":"Name","value":"status"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"TeamListTeamFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Team"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"definition"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"TeamListItemTeamFragment"}}]}}]} as unknown as DocumentNode<MeQuery, MeQueryVariables>;
+export const ObjectivesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Objectives"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"teamId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"status"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Status"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"objectives"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"teamId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"teamId"}}},{"kind":"Argument","name":{"kind":"Name","value":"status"},"value":{"kind":"Variable","name":{"kind":"Name","value":"status"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"contact"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]}}]} as unknown as DocumentNode<ObjectivesQuery, ObjectivesQueryVariables>;
+export const MembersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Members"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"teamId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"contacts"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"teamId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"teamId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}}]}}]} as unknown as DocumentNode<MembersQuery, MembersQueryVariables>;
 export const TeamDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Team"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"team"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"contacts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}}]}}]} as unknown as DocumentNode<TeamQuery, TeamQueryVariables>;
