@@ -51,10 +51,10 @@ export default function Team({ id }: Props): ReactElement {
             </TabList>
           </Box>
           <TabPanel value="1">
-            <ObjectiveList teamId={id} />
+            <ObjectiveList teamId={data?.team.id} />
           </TabPanel>
           <TabPanel value="2">
-            <MemberList teamId={id} />
+            <MemberList teamId={data?.team.id ?? id} />
           </TabPanel>
         </TabContext>
       </Box>
