@@ -7,12 +7,12 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
   IconButton,
   Stack,
   TextField,
   ToggleButton,
   ToggleButtonGroup,
+  Typography,
 } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import dayjs from 'dayjs'
@@ -128,20 +128,19 @@ export default function ObjectiveCreateDialog({
           setFieldValue,
         }) => (
           <Form onSubmit={handleSubmit}>
-            <DialogTitle>
-              Add Objective
-              <IconButton
-                aria-label="close"
-                onClick={() => onClose?.()}
-                sx={{
-                  position: 'absolute',
-                  right: 8,
-                  top: 10,
-                }}
-              >
+            <Stack
+              sx={{ py: 2, px: 3 }}
+              direction="row"
+              alignItems="center"
+              spacing={2}
+            >
+              <Typography variant="h6" sx={{ flexGrow: 1 }} noWrap>
+                Add Objective
+              </Typography>
+              <IconButton aria-label="close" onClick={() => onClose?.()}>
                 <CloseIcon />
               </IconButton>
-            </DialogTitle>
+            </Stack>
             <DialogContent dividers>
               <Stack spacing={2}>
                 <TextField

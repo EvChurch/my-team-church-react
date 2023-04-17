@@ -1,6 +1,5 @@
 import { useQuery } from '@apollo/client'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
-import CalendarTodayRoundedIcon from '@mui/icons-material/CalendarTodayRounded'
 import { TabContext, TabList } from '@mui/lab'
 import {
   Box,
@@ -11,32 +10,22 @@ import {
   Link,
   Stack,
   Tab,
-  Typography,
 } from '@mui/material'
-import dayjs from 'dayjs'
 import { compact } from 'lodash'
 import { type ReactElement, type SyntheticEvent, useState } from 'react'
 
 import { graphql } from '../../gql'
 import { type ObjectivesQuery, Status } from '../../gql/graphql'
-import Avatar from '../Avatar/Avatar'
 import ObjectiveCreateDialog from '../ObjectiveCreateDialog'
+
+import ObjectiveListItem from './ObjectiveListItem'
 
 const ObjectivesQueryDocument = graphql(`
   query Objectives($teamId: ID, $status: Status) {
     objectives(teamId: $teamId, status: $status) {
       nodes {
-        contact {
-          id
-          avatar
-          title
-        }
-        createdAt
-        dueAt
         id
-        status
-        title
-        updatedAt
+        ...ObjectiveListItemObjectiveFragment
       }
     }
     me {
@@ -74,7 +63,6 @@ export default function ObjectiveList({
         contactId={data?.me?.contacts?.[0]?.id}
         open={open}
         onClose={(objectiveId) => {
-          console.log(objectiveId)
           setOpen(false)
         }}
       />
@@ -116,36 +104,7 @@ export default function ObjectiveList({
           data?.objectives.nodes?.length > 0 && (
             <Stack spacing={2} p={2}>
               {compact(data?.objectives.nodes).map((objective) => (
-                <Card key={objective.id}>
-                  <CardContent>
-                    <Stack spacing={1}>
-                      <Typography sx={{ fontWeight: 'bold' }}>
-                        {objective.title}
-                      </Typography>
-                      <Stack spacing={2} direction="row">
-                        <Stack direction="row" spacing={1} alignItems="center">
-                          <Avatar
-                            src={objective.contact.avatar ?? undefined}
-                            title={objective.contact.title}
-                            type="contact"
-                            sx={{ width: 20, height: 20, fontSize: '1rem' }}
-                          />
-                          <Typography variant="body2">
-                            {objective.contact.title}
-                          </Typography>
-                        </Stack>
-                        <Stack direction="row" spacing={1} alignItems="center">
-                          <CalendarTodayRoundedIcon
-                            sx={{ width: 20, height: 20 }}
-                          />
-                          <Typography variant="body2">
-                            {dayjs(objective.dueAt).format('MMM D')}
-                          </Typography>
-                        </Stack>
-                      </Stack>
-                    </Stack>
-                  </CardContent>
-                </Card>
+                <ObjectiveListItem key={objective.id} objective={objective} />
               ))}
             </Stack>
           )}

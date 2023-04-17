@@ -17,7 +17,9 @@ const documents = {
     "\n  query Me {\n    me {\n      id\n      teams {\n        ...TeamListTeamFragment\n      }\n    }\n  }\n": types.MeDocument,
     "\n  query TeamContactNames {\n    teams(status: active) {\n      nodes {\n        id\n        title\n        definition\n        slug\n        contacts {\n          id\n          title\n          avatar\n          slug\n        }\n      }\n    }\n  }\n": types.TeamContactNamesDocument,
     "\n  mutation ObjectiveCreate($input: ObjectiveInput!) {\n    objectiveCreate(input: { objective: $input }) {\n      objective {\n        id\n      }\n    }\n  }\n": types.ObjectiveCreateDocument,
-    "\n  query Objectives($teamId: ID, $status: Status) {\n    objectives(teamId: $teamId, status: $status) {\n      nodes {\n        contact {\n          id\n          avatar\n          title\n        }\n        createdAt\n        dueAt\n        id\n        status\n        title\n        updatedAt\n      }\n    }\n    me {\n      id\n      contacts {\n        id\n      }\n    }\n  }\n": types.ObjectivesDocument,
+    "\n  query Objective($id: ID!) {\n    objective(id: $id) {\n      contact {\n        id\n        avatar\n        title\n      }\n      createdAt\n      dueAt\n      id\n      status\n      title\n      updatedAt\n    }\n  }\n": types.ObjectiveDocument,
+    "\n  query Objectives($teamId: ID, $status: Status) {\n    objectives(teamId: $teamId, status: $status) {\n      nodes {\n        id\n        ...ObjectiveListItemObjectiveFragment\n      }\n    }\n    me {\n      id\n      contacts {\n        id\n      }\n    }\n  }\n": types.ObjectivesDocument,
+    "\n  fragment ObjectiveListItemObjectiveFragment on Objective {\n    contact {\n      id\n      avatar\n      title\n    }\n    createdAt\n    dueAt\n    id\n    status\n    title\n    updatedAt\n  }\n": types.ObjectiveListItemObjectiveFragmentFragmentDoc,
     "\n  query Members($teamId: ID!) {\n    contacts(teamId: $teamId) {\n      nodes {\n        id\n        avatar\n        firstName\n        lastName\n        title\n      }\n    }\n  }\n": types.MembersDocument,
     "\n  query Team($id: ID!) {\n    team(id: $id) {\n      id\n      title\n      contacts {\n        id\n        avatar\n        firstName\n        lastName\n        title\n      }\n    }\n  }\n": types.TeamDocument,
     "\n  fragment TeamListTeamFragment on Team {\n    id\n    title\n    status\n    definition\n    ...TeamListItemTeamFragment\n  }\n": types.TeamListTeamFragmentFragmentDoc,
@@ -57,7 +59,15 @@ export function graphql(source: "\n  mutation ObjectiveCreate($input: ObjectiveI
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query Objectives($teamId: ID, $status: Status) {\n    objectives(teamId: $teamId, status: $status) {\n      nodes {\n        contact {\n          id\n          avatar\n          title\n        }\n        createdAt\n        dueAt\n        id\n        status\n        title\n        updatedAt\n      }\n    }\n    me {\n      id\n      contacts {\n        id\n      }\n    }\n  }\n"): (typeof documents)["\n  query Objectives($teamId: ID, $status: Status) {\n    objectives(teamId: $teamId, status: $status) {\n      nodes {\n        contact {\n          id\n          avatar\n          title\n        }\n        createdAt\n        dueAt\n        id\n        status\n        title\n        updatedAt\n      }\n    }\n    me {\n      id\n      contacts {\n        id\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  query Objective($id: ID!) {\n    objective(id: $id) {\n      contact {\n        id\n        avatar\n        title\n      }\n      createdAt\n      dueAt\n      id\n      status\n      title\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  query Objective($id: ID!) {\n    objective(id: $id) {\n      contact {\n        id\n        avatar\n        title\n      }\n      createdAt\n      dueAt\n      id\n      status\n      title\n      updatedAt\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query Objectives($teamId: ID, $status: Status) {\n    objectives(teamId: $teamId, status: $status) {\n      nodes {\n        id\n        ...ObjectiveListItemObjectiveFragment\n      }\n    }\n    me {\n      id\n      contacts {\n        id\n      }\n    }\n  }\n"): (typeof documents)["\n  query Objectives($teamId: ID, $status: Status) {\n    objectives(teamId: $teamId, status: $status) {\n      nodes {\n        id\n        ...ObjectiveListItemObjectiveFragment\n      }\n    }\n    me {\n      id\n      contacts {\n        id\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment ObjectiveListItemObjectiveFragment on Objective {\n    contact {\n      id\n      avatar\n      title\n    }\n    createdAt\n    dueAt\n    id\n    status\n    title\n    updatedAt\n  }\n"): (typeof documents)["\n  fragment ObjectiveListItemObjectiveFragment on Objective {\n    contact {\n      id\n      avatar\n      title\n    }\n    createdAt\n    dueAt\n    id\n    status\n    title\n    updatedAt\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

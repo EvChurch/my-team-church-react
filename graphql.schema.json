@@ -1235,6 +1235,35 @@
             "deprecationReason": null
           },
           {
+            "name": "objective",
+            "description": "retrieve objective",
+            "args": [
+              {
+                "name": "id",
+                "description": "id of objective to retrieve",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Objective",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "objectives",
             "description": "retrieve objectives",
             "args": [
