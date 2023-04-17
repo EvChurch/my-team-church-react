@@ -20,7 +20,7 @@ import { type ReactElement, type SyntheticEvent, useState } from 'react'
 import { graphql } from '../../gql'
 import { type ObjectivesQuery, Status } from '../../gql/graphql'
 import Avatar from '../Avatar/Avatar'
-import ObjectiveDialog from '../ObjectiveDialog'
+import ObjectiveCreateDialog from '../ObjectiveCreateDialog'
 
 const ObjectivesQueryDocument = graphql(`
   query Objectives($teamId: ID, $status: Status) {
@@ -69,11 +69,12 @@ export default function ObjectiveList({
 
   return (
     <>
-      <ObjectiveDialog
+      <ObjectiveCreateDialog
         teamId={teamId}
         contactId={data?.me?.contacts?.[0]?.id}
         open={open}
-        onClose={() => {
+        onClose={(objectiveId) => {
+          console.log(objectiveId)
           setOpen(false)
         }}
       />

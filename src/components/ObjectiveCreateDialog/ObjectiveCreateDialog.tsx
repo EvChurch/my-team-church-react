@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client'
+import CloseIcon from '@mui/icons-material/CloseRounded'
 import {
   Autocomplete,
   Box,
@@ -7,6 +8,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  IconButton,
   Stack,
   TextField,
   ToggleButton,
@@ -73,7 +75,7 @@ const Schema = z.object({
   description: z.string().optional(),
 })
 
-export default function ObjectiveDialog({
+export default function ObjectiveCreateDialog({
   open,
   onClose,
   teamId,
@@ -126,7 +128,20 @@ export default function ObjectiveDialog({
           setFieldValue,
         }) => (
           <Form onSubmit={handleSubmit}>
-            <DialogTitle>Add Objective</DialogTitle>
+            <DialogTitle>
+              Add Objective
+              <IconButton
+                aria-label="close"
+                onClick={() => onClose?.()}
+                sx={{
+                  position: 'absolute',
+                  right: 8,
+                  top: 10,
+                }}
+              >
+                <CloseIcon />
+              </IconButton>
+            </DialogTitle>
             <DialogContent dividers>
               <Stack spacing={2}>
                 <TextField
