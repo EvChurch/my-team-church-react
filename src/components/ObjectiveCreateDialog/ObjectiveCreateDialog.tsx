@@ -13,6 +13,8 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import dayjs from 'dayjs'
@@ -29,6 +31,7 @@ import {
   type TeamContactNamesQuery,
 } from '../../gql/graphql'
 import Avatar from '../Avatar'
+import SlideUp from '../SlideUp'
 
 const TeamContactNamesQueryDocument = graphql(`
   query TeamContactNames {
@@ -87,6 +90,8 @@ export default function ObjectiveCreateDialog({
   const [objectiveCreate] = useMutation<ObjectiveCreateMutation>(
     ObjectiveCreateMutationDocument
   )
+  const theme = useTheme()
+  const smDown = useMediaQuery(theme.breakpoints.down('sm'))
 
   return (
     <Dialog
@@ -94,7 +99,9 @@ export default function ObjectiveCreateDialog({
       onClose={() => onClose?.()}
       scroll="paper"
       fullWidth
+      fullScreen={smDown}
       maxWidth="md"
+      TransitionComponent={smDown ? SlideUp : undefined}
     >
       <Formik
         validationSchema={toFormikValidationSchema(Schema)}

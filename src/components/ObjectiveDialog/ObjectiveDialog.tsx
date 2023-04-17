@@ -1,16 +1,23 @@
 import { useLazyQuery } from '@apollo/client'
+import CalendarTodayRoundedIcon from '@mui/icons-material/CalendarTodayRounded'
 import CloseIcon from '@mui/icons-material/CloseRounded'
+import Groups2RoundedIcon from '@mui/icons-material/Groups2Rounded'
 import {
   Dialog,
   DialogContent,
   IconButton,
   Stack,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material'
+import dayjs from 'dayjs'
 import { type ReactElement, useEffect } from 'react'
 
 import { graphql } from '../../gql'
 import { type ObjectiveQuery } from '../../gql/graphql'
+import Avatar from '../Avatar'
+import SlideUp from '../SlideUp'
 
 const ObjectiveQueryDocument = graphql(`
   query Objective($id: ID!) {
@@ -18,6 +25,10 @@ const ObjectiveQueryDocument = graphql(`
       contact {
         id
         avatar
+        title
+      }
+      team {
+        id
         title
       }
       createdAt
@@ -44,6 +55,8 @@ export default function ObjectiveDialog({
   const [loadObjective, { data }] = useLazyQuery<ObjectiveQuery>(
     ObjectiveQueryDocument
   )
+  const theme = useTheme()
+  const smDown = useMediaQuery(theme.breakpoints.down('sm'))
 
   useEffect(() => {
     if (open === true) {
@@ -57,10 +70,12 @@ export default function ObjectiveDialog({
       onClose={() => onClose?.()}
       scroll="paper"
       fullWidth
+      fullScreen={smDown}
       maxWidth="md"
+      TransitionComponent={smDown ? SlideUp : undefined}
     >
       <Stack
-        sx={{ py: 2, px: 3 }}
+        sx={{ pt: 2, px: 3 }}
         direction="row"
         alignItems="center"
         spacing={2}
@@ -71,6 +86,35 @@ export default function ObjectiveDialog({
         <IconButton aria-label="close" onClick={() => onClose?.()}>
           <CloseIcon />
         </IconButton>
+      </Stack>
+      <Stack
+        spacing={{ xs: 1, sm: 3 }}
+        direction={{ xs: 'column', sm: 'row' }}
+        sx={{ pb: 2, px: 3 }}
+      >
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Avatar
+            src={data?.objective.contact.avatar ?? undefined}
+            title={data?.objective.contact.title}
+            type="contact"
+            sx={{ width: 20, height: 20, fontSize: '1rem' }}
+          />
+          <Typography variant="body2" noWrap>
+            {data?.objective.contact.title}
+          </Typography>
+        </Stack>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Groups2RoundedIcon sx={{ width: 20, height: 20 }} />
+          <Typography variant="body2" noWrap>
+            {data?.objective.team.title}
+          </Typography>
+        </Stack>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <CalendarTodayRoundedIcon sx={{ width: 20, height: 20 }} />
+          <Typography variant="body2" noWrap>
+            {dayjs(data?.objective.dueAt).format('MMM D')}
+          </Typography>
+        </Stack>
       </Stack>
       <DialogContent dividers></DialogContent>
     </Dialog>
