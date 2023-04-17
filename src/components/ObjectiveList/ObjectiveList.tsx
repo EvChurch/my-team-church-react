@@ -39,6 +39,12 @@ const ObjectivesQueryDocument = graphql(`
         updatedAt
       }
     }
+    me {
+      id
+      contacts {
+        id
+      }
+    }
   }
 `)
 
@@ -65,6 +71,7 @@ export default function ObjectiveList({
     <>
       <ObjectiveDialog
         teamId={teamId}
+        contactId={data?.me?.contacts?.[0]?.id}
         open={open}
         onClose={() => {
           setOpen(false)
