@@ -6,7 +6,6 @@ import {
   Box,
   Card,
   CardContent,
-  Chip,
   Divider,
   IconButton,
   Link,
