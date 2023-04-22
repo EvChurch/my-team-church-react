@@ -1,0 +1,109 @@
+import { useQuery } from '@apollo/client'
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Divider,
+  IconButton,
+  Stack,
+  Typography,
+} from '@mui/material'
+import { compact } from 'lodash'
+import { type ReactElement, useState } from 'react'
+
+import { graphql } from '../../gql'
+import { type ObjectiveResultsQuery } from '../../gql/graphql'
+
+import ObjectiveResultListItem from './ObjectiveResultListItem'
+
+const ObjectiveResultsQueryDocument = graphql(`
+  query ObjectiveResults($teamId: [ID!], $objectiveId: [ID!]) {
+    objectiveResults(teamId: $teamId, objectiveId: $objectiveId) {
+      nodes {
+        id
+        ...ObjectiveResultListItemObjectiveResultFragment
+      }
+    }
+  }
+`)
+
+interface Props {
+  teamId?: string | [string]
+  objectiveId?: string | [string]
+}
+
+export default function ObjectiveResultList({
+  teamId,
+  objectiveId,
+}: Props): ReactElement {
+  const { data, loading } = useQuery<ObjectiveResultsQuery>(
+    ObjectiveResultsQueryDocument,
+    {
+      variables: { teamId, status },
+    }
+  )
+
+  const [open, setOpen] = useState(false)
+
+  return (
+    <>
+      {/* <ObjectiveResultCreateDialog
+        teamId={teamId}
+        objectiveId={objectiveId}
+        open={open}
+        onClose={() => {
+          setOpen(false)
+        }}
+      /> */}
+      <Card>
+        <Stack direction="row" alignItems="center">
+          <Typography px={2} flexGrow={1} fontWeight="bold">
+            Results
+          </Typography>
+          <Box m="4px">
+            <IconButton
+              onClick={() => {
+                setOpen(true)
+              }}
+            >
+              <AddOutlinedIcon />
+            </IconButton>
+          </Box>
+        </Stack>
+        <Divider />
+        {loading && (
+          <CardContent sx={{ textAlign: 'center' }}>Loading...</CardContent>
+        )}
+        {!loading &&
+          data?.objectiveResults.nodes != null &&
+          data?.objectiveResults.nodes?.length === 0 && (
+            <CardContent sx={{ textAlign: 'center' }}>
+              <Typography gutterBottom>
+                Add Key Results to track progress, and Initiatives to support
+                your Objective.
+              </Typography>
+              <Button
+                onClick={() => {
+                  setOpen(true)
+                }}
+                variant="contained"
+              >
+                Add Result
+              </Button>
+            </CardContent>
+          )}
+        {!loading &&
+          data?.objectiveResults.nodes != null &&
+          data?.objectiveResults.nodes?.length > 0 && (
+            <Stack spacing={2} p={2}>
+              {compact(data?.objectiveResults.nodes).map((result) => (
+                <ObjectiveResultListItem key={result.id} result={result} />
+              ))}
+            </Stack>
+          )}
+      </Card>
+    </>
+  )
+}

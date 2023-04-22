@@ -3,8 +3,10 @@ import CalendarTodayRoundedIcon from '@mui/icons-material/CalendarTodayRounded'
 import CloseIcon from '@mui/icons-material/CloseRounded'
 import Groups2RoundedIcon from '@mui/icons-material/Groups2Rounded'
 import {
+  Box,
   Dialog,
   DialogContent,
+  Divider,
   IconButton,
   Stack,
   Typography,
@@ -17,6 +19,9 @@ import { type ReactElement, useEffect } from 'react'
 import { graphql } from '../../gql'
 import { type ObjectiveQuery } from '../../gql/graphql'
 import Avatar from '../Avatar'
+import CircularProgressWithLabel from '../CircularProgressWithLabel'
+import ObjectiveResultList from '../ObjectiveResultList'
+import ProgressLabel from '../ProgressLabel/ProgressLabel'
 import SlideUp from '../SlideUp'
 
 const ObjectiveQueryDocument = graphql(`
@@ -37,6 +42,8 @@ const ObjectiveQueryDocument = graphql(`
       status
       title
       updatedAt
+      progress
+      percentage
     }
   }
 `)
@@ -75,48 +82,56 @@ export default function ObjectiveDialog({
       TransitionComponent={smDown ? SlideUp : undefined}
     >
       <Stack
-        sx={{ pt: 2, px: 3 }}
+        sx={{ py: 2, px: 3 }}
         direction="row"
-        alignItems="center"
         spacing={2}
+        alignItems="center"
       >
-        <Typography variant="h6" sx={{ flexGrow: 1 }} noWrap>
-          {data?.objective.title}
-        </Typography>
+        <Box flexGrow={1}>
+          <Typography variant="h6" sx={{ flexGrow: 1 }} noWrap>
+            {data?.objective.title}
+          </Typography>
+        </Box>
+        <Divider orientation="vertical" flexItem />
         <IconButton aria-label="close" onClick={() => onClose?.()}>
           <CloseIcon />
         </IconButton>
       </Stack>
-      <Stack
-        spacing={{ xs: 1, sm: 3 }}
-        direction={{ xs: 'column', sm: 'row' }}
-        sx={{ pb: 2, px: 3 }}
-      >
-        <Stack direction="row" spacing={1} alignItems="center">
-          <Avatar
-            src={data?.objective.contact.avatar ?? undefined}
-            title={data?.objective.contact.title}
-            type="contact"
-            sx={{ width: 20, height: 20, fontSize: '1rem' }}
-          />
-          <Typography variant="body2" noWrap>
-            {data?.objective.contact.title}
-          </Typography>
+      <DialogContent dividers>
+        <Stack
+          spacing={{ xs: 1, sm: 3 }}
+          direction={{ xs: 'column', sm: 'row' }}
+          sx={{ pb: 2 }}
+          flexGrow={1}
+        >
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Avatar
+              src={data?.objective.contact.avatar ?? undefined}
+              title={data?.objective.contact.title}
+              type="contact"
+              sx={{ width: 20, height: 20, fontSize: '1rem' }}
+            />
+            <Typography variant="body2" noWrap>
+              {data?.objective.contact.title}
+            </Typography>
+          </Stack>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Groups2RoundedIcon sx={{ width: 20, height: 20 }} />
+            <Typography variant="body2" noWrap>
+              {data?.objective.team.title}
+            </Typography>
+          </Stack>
+          <Stack direction="row" spacing={1} alignItems="center" flexGrow={1}>
+            <CalendarTodayRoundedIcon sx={{ width: 20, height: 20 }} />
+            <Typography variant="body2" noWrap>
+              {dayjs(data?.objective.dueAt).format('MMM D')}
+            </Typography>
+          </Stack>
+          <CircularProgressWithLabel value={data?.objective.percentage} />
+          <ProgressLabel value={data?.objective.progress} />
         </Stack>
-        <Stack direction="row" spacing={1} alignItems="center">
-          <Groups2RoundedIcon sx={{ width: 20, height: 20 }} />
-          <Typography variant="body2" noWrap>
-            {data?.objective.team.title}
-          </Typography>
-        </Stack>
-        <Stack direction="row" spacing={1} alignItems="center">
-          <CalendarTodayRoundedIcon sx={{ width: 20, height: 20 }} />
-          <Typography variant="body2" noWrap>
-            {dayjs(data?.objective.dueAt).format('MMM D')}
-          </Typography>
-        </Stack>
-      </Stack>
-      <DialogContent dividers></DialogContent>
+        <ObjectiveResultList />
+      </DialogContent>
     </Dialog>
   )
 }

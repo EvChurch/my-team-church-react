@@ -1,18 +1,18 @@
 import { useQuery } from '@apollo/client'
 import { Container, Typography } from '@mui/material'
+import { compact } from 'lodash'
 import { useSession } from 'next-auth/react'
 import { type ReactElement } from 'react'
 
 import { graphql } from '../../gql'
-import { type MeQuery, Status } from '../../gql/graphql'
+import { type MeQuery, Status, type TeamsQuery } from '../../gql/graphql'
 import ObjectiveList from '../ObjectiveList'
 import TeamList from '../TeamList'
 
-const MeQueryDocument = graphql(`
-  query Me {
-    me {
-      id
-      teams {
+const TeamsQueryDocument = graphql(`
+  query Teams {
+    teams {
+      nodes {
         ...TeamListTeamFragment
       }
     }
@@ -21,7 +21,7 @@ const MeQueryDocument = graphql(`
 
 export default function Dashboard(): ReactElement {
   const { data: session } = useSession()
-  const { data } = useQuery<MeQuery>(MeQueryDocument)
+  const { data } = useQuery<TeamsQuery>(TeamsQueryDocument)
   const curHr = new Date().getHours()
   let greeting
 
@@ -44,7 +44,9 @@ export default function Dashboard(): ReactElement {
       </Typography>
       <ObjectiveList status={Status.Active} />
 
-      {data?.me.teams != null && <TeamList teams={data.me.teams} />}
+      {data?.teams.nodes != null && (
+        <TeamList teams={compact(data.teams.nodes)} />
+      )}
     </Container>
   )
 }
