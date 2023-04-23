@@ -12,18 +12,11 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { signIn } from 'next-auth/react'
 import { type ReactElement, useState } from 'react'
-import { z } from 'zod'
-import { toFormikValidationSchema } from 'zod-formik-adapter'
+import { object, string } from 'yup'
 
 import Logo from '../Logo'
 
 import login from './login.png'
-
-const Schema = z.object({
-  username: z.string(),
-  password: z.string(),
-  accountSlug: z.string(),
-})
 
 export default function Login(): ReactElement {
   const [showError, setShowError] = useState(false)
@@ -84,7 +77,11 @@ export default function Login(): ReactElement {
             </Alert>
           )}
           <Formik
-            validationSchema={toFormikValidationSchema(Schema)}
+            validationSchema={object({
+              name: string().required(),
+              password: string().required(),
+              accountSlug: string().required(),
+            })}
             initialValues={{ username: '', password: '', accountSlug: '' }}
             onSubmit={async (values) => {
               const response = await signIn('credentials', {

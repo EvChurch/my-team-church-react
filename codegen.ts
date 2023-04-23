@@ -10,7 +10,15 @@ const config: CodegenConfig = {
     },
     './src/gql/': {
       preset: 'client',
-      plugins: [],
+      plugins: ['typescript-validation-schema'],
+      config: {
+        strictScalars: true,
+        schema: 'yup',
+        scalars: {
+          ISO8601Date: 'string',
+          ISO8601DateTime: 'string',
+        },
+      },
     },
   },
 }

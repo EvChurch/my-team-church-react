@@ -15,12 +15,13 @@ import { type ReactElement, useState } from 'react'
 
 import { graphql } from '../../gql'
 import { type ObjectiveResultsQuery } from '../../gql/graphql'
+import ObjectiveResultCreateDialog from '../ObjectiveResultCreateDialog'
 
 import ObjectiveResultListItem from './ObjectiveResultListItem'
 
 const ObjectiveResultsQueryDocument = graphql(`
-  query ObjectiveResults($teamId: [ID!], $objectiveId: [ID!]) {
-    objectiveResults(teamId: $teamId, objectiveId: $objectiveId) {
+  query ObjectiveResults($objectiveId: [ID!]) {
+    objectiveResults(objectiveId: $objectiveId) {
       nodes {
         id
         ...ObjectiveResultListItemObjectiveResultFragment
@@ -30,18 +31,16 @@ const ObjectiveResultsQueryDocument = graphql(`
 `)
 
 interface Props {
-  teamId?: string | [string]
-  objectiveId?: string | [string]
+  objectiveId: string
 }
 
 export default function ObjectiveResultList({
-  teamId,
   objectiveId,
 }: Props): ReactElement {
   const { data, loading } = useQuery<ObjectiveResultsQuery>(
     ObjectiveResultsQueryDocument,
     {
-      variables: { teamId, status },
+      variables: { objectiveId },
     }
   )
 
@@ -49,14 +48,13 @@ export default function ObjectiveResultList({
 
   return (
     <>
-      {/* <ObjectiveResultCreateDialog
-        teamId={teamId}
+      <ObjectiveResultCreateDialog
         objectiveId={objectiveId}
         open={open}
         onClose={() => {
           setOpen(false)
         }}
-      /> */}
+      />
       <Card>
         <Stack direction="row" alignItems="center">
           <Typography px={2} flexGrow={1} fontWeight="bold">

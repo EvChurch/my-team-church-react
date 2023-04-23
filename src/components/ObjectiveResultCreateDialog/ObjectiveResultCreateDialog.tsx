@@ -19,43 +19,47 @@ import {
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import dayjs from 'dayjs'
 import { Form, Formik } from 'formik'
-import { compact, startCase } from 'lodash'
+import { compact } from 'lodash'
 import { type ReactElement } from 'react'
 
 import { graphql } from '../../gql'
 import {
-  type ObjectiveCreateMutation,
-  type ObjectiveInput,
-  ObjectiveInputSchema,
+  Measurement,
+  type ObjectiveResultCreateMutation,
+  type ObjectiveResultInput,
+  ObjectiveResultInputSchema,
+  ObjectiveResultKind,
+  type ObjectiveTeamContactNamesAndObjectivesQuery,
   Status,
-  type TeamContactNamesQuery,
 } from '../../gql/graphql'
 import Avatar from '../Avatar'
 import SlideUp from '../SlideUp'
 
-const TeamContactNamesQueryDocument = graphql(`
-  query TeamContactNames {
-    teams(status: active) {
-      nodes {
+const ObjectiveTeamContactNamesAndObjectivesQueryDocument = graphql(`
+  query ObjectiveTeamContactNamesAndObjectives($objectiveId: ID!) {
+    objective(id: $objectiveId) {
+      id
+      team {
         id
-        title
-        definition
-        slug
         contacts {
           id
           title
           avatar
           slug
         }
+        objectives {
+          id
+          title
+        }
       }
     }
   }
 `)
 
-const ObjectiveCreateMutationDocument = graphql(`
-  mutation ObjectiveCreate($input: ObjectiveInput!) {
-    objectiveCreate(input: { objective: $input }) {
-      objective {
+const ObjectiveResultCreateMutationDocument = graphql(`
+  mutation ObjectiveResultCreate($input: ObjectiveResultInput!) {
+    objectiveResultCreate(input: { result: $input }) {
+      result {
         id
       }
     }
@@ -65,35 +69,37 @@ const ObjectiveCreateMutationDocument = graphql(`
 interface Props {
   open?: boolean
   onClose?: (id?: string) => void
-  teamId?: string
+  objectiveId: string
   contactId?: string
 }
 
-export default function ObjectiveCreateDialog({
+export default function ObjectiveResultCreateDialog({
   open,
   onClose,
-  teamId,
+  objectiveId,
   contactId,
 }: Props): ReactElement {
-  const { data, loading } = useQuery<TeamContactNamesQuery>(
-    TeamContactNamesQueryDocument
-  )
-  const [objectiveCreate] = useMutation<ObjectiveCreateMutation>(
-    ObjectiveCreateMutationDocument
+  const { data, loading } =
+    useQuery<ObjectiveTeamContactNamesAndObjectivesQuery>(
+      ObjectiveTeamContactNamesAndObjectivesQueryDocument,
+      { variables: { objectiveId } }
+    )
+  const [objectiveResultCreate] = useMutation<ObjectiveResultCreateMutation>(
+    ObjectiveResultCreateMutationDocument
   )
   const theme = useTheme()
   const smDown = useMediaQuery(theme.breakpoints.down('sm'))
 
-  const initialValues: ObjectiveInput = {
-    title: '',
-    teamId: teamId ?? '',
+  const initialValues: ObjectiveResultInput = {
     contactId: contactId ?? '',
-    dueAt: dayjs(new Date())
-      .add(1, 'month')
-      .endOf('month')
-      .format('YYYY-MM-DD'),
-    description: 'Why is it important?\n\n\n\n\nWhy is it urgent?\n\n\n\n',
+    description: '',
+    title: '',
+    objectiveId,
     status: Status.Active,
+    kind: ObjectiveResultKind.KeyResult,
+    measurement: Measurement.Numerical,
+    startValue: 0,
+    targetValue: 100,
   }
 
   return (
@@ -107,13 +113,13 @@ export default function ObjectiveCreateDialog({
       TransitionComponent={smDown ? SlideUp : undefined}
     >
       <Formik
-        validationSchema={ObjectiveInputSchema}
+        validationSchema={ObjectiveResultInputSchema}
         initialValues={initialValues}
         onSubmit={async (values) => {
-          const { data } = await objectiveCreate({
+          const { data } = await objectiveResultCreate({
             variables: { input: values },
           })
-          data?.objectiveCreate?.objective?.id != null && onClose?.()
+          data?.objectiveResultCreate?.result?.id != null && onClose?.()
         }}
       >
         {({
@@ -134,7 +140,7 @@ export default function ObjectiveCreateDialog({
               spacing={2}
             >
               <Typography variant="h6" sx={{ flexGrow: 1 }} noWrap>
-                Add Objective
+                Add Result
               </Typography>
               <IconButton aria-label="close" onClick={() => onClose?.()}>
                 <CloseIcon />
@@ -154,59 +160,16 @@ export default function ObjectiveCreateDialog({
                 />
                 <Autocomplete
                   onChange={(_event, newValue) => {
-                    setFieldValue('teamId', newValue?.id)
-                    if (values.contactId !== '') setFieldValue('contactId', '')
-                  }}
-                  value={
-                    data?.teams.nodes?.find(
-                      (team) => team?.id === values.teamId
-                    ) ?? null
-                  }
-                  id="teamId"
-                  isOptionEqualToValue={(option, value) =>
-                    option.id === value.id
-                  }
-                  options={compact(data?.teams.nodes).sort(
-                    (a, b) => -b.definition.localeCompare(a.definition)
-                  )}
-                  groupBy={({ definition }) => startCase(definition)}
-                  getOptionLabel={({ title }) => title}
-                  loading={loading}
-                  fullWidth
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Owner"
-                      inputProps={{
-                        ...params.inputProps,
-                        autoComplete: 'new-password', // disable autocomplete and autofill
-                      }}
-                      error={Boolean(touched.teamId) && Boolean(errors.teamId)}
-                      helperText={Boolean(touched.teamId) && errors.teamId}
-                    />
-                  )}
-                />
-                <Autocomplete
-                  disabled={values.teamId === ''}
-                  onChange={(_event, newValue) => {
                     setFieldValue('contactId', newValue?.id)
                   }}
-                  value={
-                    data?.teams.nodes
-                      ?.find((team) => team?.id === values.teamId)
-                      ?.contacts.find(
-                        (team) => team?.id === values.contactId
-                      ) ?? null
-                  }
+                  value={data?.objective.team.contacts.find(
+                    (contact) => contact.id === values.contactId
+                  )}
                   id="contactId"
                   isOptionEqualToValue={(option, value) =>
                     option.id === value.id
                   }
-                  options={compact(
-                    data?.teams.nodes?.find(
-                      (team) => team?.id === values.teamId
-                    )?.contacts
-                  )}
+                  options={compact(data?.objective.team.contacts)}
                   getOptionLabel={({ title }) => title}
                   loading={loading}
                   fullWidth

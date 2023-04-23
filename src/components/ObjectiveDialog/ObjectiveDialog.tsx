@@ -130,7 +130,9 @@ export default function ObjectiveDialog({
           <CircularProgressWithLabel value={data?.objective.percentage} />
           <ProgressLabel value={data?.objective.progress} />
         </Stack>
-        <ObjectiveResultList />
+        {data?.objective.id != null && (
+          <ObjectiveResultList objectiveId={data?.objective.id} />
+        )}
       </DialogContent>
     </Dialog>
   )
