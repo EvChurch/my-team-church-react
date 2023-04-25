@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
+import ShowChartRoundedIcon from '@mui/icons-material/ShowChartRounded'
 import {
   Box,
   Button,
@@ -56,8 +57,9 @@ export default function ObjectiveResultList({
         }}
       />
       <Card>
-        <Stack direction="row" alignItems="center">
-          <Typography px={2} flexGrow={1} fontWeight="bold">
+        <Stack direction="row" alignItems="center" px={2} spacing={2}>
+          <ShowChartRoundedIcon />
+          <Typography flexGrow={1} fontWeight="bold">
             Results
           </Typography>
           <Box m="4px">

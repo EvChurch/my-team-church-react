@@ -78,7 +78,7 @@ export default function Login(): ReactElement {
           )}
           <Formik
             validationSchema={object({
-              name: string().required(),
+              username: string().required(),
               password: string().required(),
               accountSlug: string().required(),
             })}

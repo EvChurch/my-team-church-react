@@ -1,6 +1,7 @@
 import { useLazyQuery } from '@apollo/client'
 import CalendarTodayRoundedIcon from '@mui/icons-material/CalendarTodayRounded'
 import CloseIcon from '@mui/icons-material/CloseRounded'
+import FlagRoundedIcon from '@mui/icons-material/FlagRounded'
 import Groups2RoundedIcon from '@mui/icons-material/Groups2Rounded'
 import {
   Box,
@@ -87,6 +88,7 @@ export default function ObjectiveDialog({
         spacing={2}
         alignItems="center"
       >
+        <FlagRoundedIcon />
         <Box flexGrow={1}>
           <Typography variant="h6" sx={{ flexGrow: 1 }} noWrap>
             {data?.objective.title}

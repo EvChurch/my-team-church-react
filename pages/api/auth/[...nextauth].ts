@@ -6,6 +6,9 @@ import { type UserLoginMutation } from '../../../src/gql/graphql'
 
 export const authOptions: NextAuthOptions = {
   debug: true,
+  jwt: {
+    maxAge: 60 * 60 * 24 * 30,
+  },
   providers: [
     CredentialsProvider({
       credentials: {
@@ -23,6 +26,7 @@ export const authOptions: NextAuthOptions = {
             mutation UserLogin($input: UserLoginMutationInput!) {
               userLogin(input: $input) {
                 apiToken: token
+                expiresAt
                 user {
                   id
                   title
@@ -66,7 +70,6 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       session.user = token.user as User
-
       return session
     },
   },

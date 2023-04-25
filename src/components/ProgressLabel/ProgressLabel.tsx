@@ -1,16 +1,18 @@
 import CircleRoundedIcon from '@mui/icons-material/CircleRounded'
 import EmojiEventsRoundedIcon from '@mui/icons-material/EmojiEventsRounded'
-import { Stack, Typography } from '@mui/material'
+import { Stack, Typography, type TypographyProps } from '@mui/material'
 import { type ReactElement } from 'react'
 
 import { Progress } from '../../gql/graphql'
 
 interface Props {
   value?: Progress
+  labelProps?: TypographyProps
 }
 
 export default function ProgressLabel({
   value = Progress.NoStatus,
+  labelProps,
 }: Props): ReactElement {
   let label: string, color: string
   let Icon = CircleRoundedIcon
@@ -41,7 +43,7 @@ export default function ProgressLabel({
   return (
     <Stack direction="row" spacing={1} alignItems="center">
       <Icon sx={{ color, height: 20, width: 20 }} />
-      <Typography variant="body2" noWrap>
+      <Typography variant="body2" noWrap {...labelProps}>
         {label}
       </Typography>
     </Stack>

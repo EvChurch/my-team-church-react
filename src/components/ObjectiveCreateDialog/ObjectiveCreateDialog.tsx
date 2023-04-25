@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client'
 import CloseIcon from '@mui/icons-material/CloseRounded'
+import FlagRoundedIcon from '@mui/icons-material/FlagRounded'
 import {
   Autocomplete,
   Box,
@@ -7,6 +8,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  Divider,
   IconButton,
   Stack,
   TextField,
@@ -133,9 +135,12 @@ export default function ObjectiveCreateDialog({
               alignItems="center"
               spacing={2}
             >
+              <FlagRoundedIcon />
+
               <Typography variant="h6" sx={{ flexGrow: 1 }} noWrap>
                 Add Objective
               </Typography>
+              <Divider orientation="vertical" flexItem />
               <IconButton aria-label="close" onClick={() => onClose?.()}>
                 <CloseIcon />
               </IconButton>

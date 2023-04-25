@@ -1,9 +1,11 @@
-import CalendarTodayRoundedIcon from '@mui/icons-material/CalendarTodayRounded'
-import { Card, CardContent, Link, Stack, Typography } from '@mui/material'
-import dayjs from 'dayjs'
+import PlaylistAddCheckRoundedIcon from '@mui/icons-material/PlaylistAddCheckRounded'
+import PostAddRoundedIcon from '@mui/icons-material/PostAddRounded'
+import ShowChartRoundedIcon from '@mui/icons-material/ShowChartRounded'
+import { IconButton, Link, Stack, Tooltip, Typography } from '@mui/material'
 import { type ReactElement } from 'react'
 
 import { type FragmentType, graphql, useFragment } from '../../../gql'
+import { ObjectiveResultKind } from '../../../gql/graphql'
 import Avatar from '../../Avatar'
 import CircularProgressWithLabel from '../../CircularProgressWithLabel/CircularProgressWithLabel'
 import ProgressLabel from '../../ProgressLabel/ProgressLabel'
@@ -23,6 +25,7 @@ const ObjectiveResultListItemObjectiveResultFragment = graphql(`
     updatedAt
     percentage
     progress
+    kind
   }
 `)
 
@@ -39,57 +42,40 @@ export default function ObjectiveResultListItem({
   )
 
   return (
-    <>
-      <Card>
-        <CardContent>
-          <Stack direction="row">
-            <Stack flexGrow={1}>
-              <Typography sx={{ fontWeight: 'bold' }} gutterBottom>
-                <Link
-                  onClick={() => {
-                    setOpen(true)
-                  }}
-                  color="textPrimary"
-                  underline="none"
-                  sx={{ cursor: 'pointer' }}
-                >
-                  {result.title}
-                </Link>
-              </Typography>
-              <Stack spacing={2} direction="row">
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <Avatar
-                    src={result.contact.avatar ?? undefined}
-                    title={result.contact.title}
-                    type="contact"
-                    sx={{ width: 20, height: 20, fontSize: '1rem' }}
-                  />
-                  <Typography variant="body2">
-                    {result.contact.title}
-                  </Typography>
-                </Stack>
-                {result.dueAt != null && (
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    <CalendarTodayRoundedIcon sx={{ width: 20, height: 20 }} />
-                    <Typography variant="body2">
-                      {dayjs(result.dueAt).format('MMM D')}
-                    </Typography>
-                  </Stack>
-                )}
-              </Stack>
-            </Stack>
-            <Stack
-              direction="row"
-              alignSelf="center"
-              alignItems="center"
-              spacing={2}
-            >
-              <CircularProgressWithLabel value={result.percentage} />
-              <ProgressLabel value={result.progress} />
-            </Stack>
-          </Stack>
-        </CardContent>
-      </Card>
-    </>
+    <Stack direction="row" alignItems="center" spacing={2}>
+      {result.kind === ObjectiveResultKind.KeyResult && (
+        <Tooltip title="Key Result">
+          <ShowChartRoundedIcon htmlColor="rgb(5 169 244)" />
+        </Tooltip>
+      )}
+      {result.kind === ObjectiveResultKind.Initiative && (
+        <Tooltip title="Initiative">
+          <PlaylistAddCheckRoundedIcon htmlColor="rgb(55 213 146)" />
+        </Tooltip>
+      )}
+      <Avatar
+        src={result.contact.avatar ?? undefined}
+        title={result.contact.title}
+        type="contact"
+        sx={{ width: 30, height: 30, fontSize: '1rem' }}
+      />
+      <Typography sx={{ fontWeight: 'bold', flexGrow: 1 }} noWrap>
+        <Link
+          color="textPrimary"
+          underline="none"
+          sx={{ cursor: 'pointer', '&:hover': { color: 'primary.main' } }}
+        >
+          {result.title}
+        </Link>
+      </Typography>
+      <CircularProgressWithLabel value={result.percentage} />
+      <ProgressLabel
+        value={result.progress}
+        labelProps={{ display: { xs: 'none', sm: 'block' } }}
+      />
+      <IconButton>
+        <PostAddRoundedIcon />
+      </IconButton>
+    </Stack>
   )
 }

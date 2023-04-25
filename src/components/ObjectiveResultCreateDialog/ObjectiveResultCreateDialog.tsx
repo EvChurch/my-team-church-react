@@ -1,13 +1,32 @@
 import { useMutation, useQuery } from '@apollo/client'
+import AttachMoneyRoundedIcon from '@mui/icons-material/AttachMoneyRounded'
 import CloseIcon from '@mui/icons-material/CloseRounded'
+import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded'
+import NumbersRoundedIcon from '@mui/icons-material/NumbersRounded'
+import PercentRoundedIcon from '@mui/icons-material/PercentRounded'
+import PlaylistAddCheckRoundedIcon from '@mui/icons-material/PlaylistAddCheckRounded'
+import ShowChartRoundedIcon from '@mui/icons-material/ShowChartRounded'
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Autocomplete,
   Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
   IconButton,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Radio,
+  RadioGroup,
+  Select,
   Stack,
   TextField,
   ToggleButton,
@@ -139,6 +158,7 @@ export default function ObjectiveResultCreateDialog({
               alignItems="center"
               spacing={2}
             >
+              <ShowChartRoundedIcon />
               <Typography variant="h6" sx={{ flexGrow: 1 }} noWrap>
                 Add Result
               </Typography>
@@ -201,35 +221,240 @@ export default function ObjectiveResultCreateDialog({
                     />
                   )}
                 />
-                <DatePicker
-                  label="Due Date"
-                  value={values.dueAt != null ? dayjs(values.dueAt) : null}
-                  onChange={(value) => {
-                    setFieldValue('dueAt', value?.format('YYYY-MM-DD'))
-                  }}
-                  slotProps={{
-                    textField: {
-                      error: Boolean(touched.dueAt) && Boolean(errors.dueAt),
-                      helperText: Boolean(touched.dueAt) && errors.dueAt,
+                <FormControl fullWidth>
+                  <InputLabel id="measurement-select-label">
+                    Measure as a:
+                  </InputLabel>
+                  <Select
+                    labelId="measurement-select-label"
+                    id="measurement"
+                    name="measurement"
+                    value={values.measurement}
+                    label="Measure as a:"
+                    onChange={handleChange}
+                  >
+                    <MenuItem value={Measurement.Numerical}>Numerical</MenuItem>
+                    <MenuItem value={Measurement.Percentage}>
+                      Percentage
+                    </MenuItem>
+                    <MenuItem value={Measurement.Currency}>Currency</MenuItem>
+                  </Select>
+                </FormControl>
+                <Stack direction="row" spacing={2}>
+                  <TextField
+                    id="startValue"
+                    name="startValue"
+                    label="Start value"
+                    value={values.startValue}
+                    onChange={handleChange}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          {values.measurement === Measurement.Numerical && (
+                            <NumbersRoundedIcon />
+                          )}
+                          {values.measurement === Measurement.Percentage && (
+                            <PercentRoundedIcon />
+                          )}
+                          {values.measurement === Measurement.Currency && (
+                            <AttachMoneyRoundedIcon />
+                          )}
+                        </InputAdornment>
+                      ),
+                    }}
+                    error={
+                      Boolean(touched.startValue) && Boolean(errors.startValue)
+                    }
+                    helperText={
+                      Boolean(touched.startValue) && errors.startValue
+                    }
+                    fullWidth
+                  />
+                  <TextField
+                    id="targetValue"
+                    name="targetValue"
+                    label="Target value"
+                    value={values.targetValue}
+                    onChange={handleChange}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          {values.measurement === Measurement.Numerical && (
+                            <NumbersRoundedIcon />
+                          )}
+                          {values.measurement === Measurement.Percentage && (
+                            <PercentRoundedIcon />
+                          )}
+                          {values.measurement === Measurement.Currency && (
+                            <AttachMoneyRoundedIcon />
+                          )}
+                        </InputAdornment>
+                      ),
+                    }}
+                    error={
+                      Boolean(touched.targetValue) &&
+                      Boolean(errors.targetValue)
+                    }
+                    helperText={
+                      Boolean(touched.targetValue) && errors.targetValue
+                    }
+                    fullWidth
+                  />
+                </Stack>
+                <FormControl>
+                  <FormLabel id="kind-label">Result Type</FormLabel>
+                  <RadioGroup
+                    aria-labelledby="kind-label"
+                    name="kind"
+                    value={values.kind}
+                    onChange={handleChange}
+                  >
+                    <Stack spacing={2}>
+                      <Paper
+                        variant="outlined"
+                        sx={{
+                          p: 2,
+                          '&:hover': {
+                            borderColor: 'text.primary',
+                          },
+                        }}
+                      >
+                        <FormControlLabel
+                          sx={{ display: 'flex' }}
+                          value={ObjectiveResultKind.KeyResult}
+                          control={<Radio />}
+                          disableTypography
+                          label={
+                            <Stack
+                              spacing={2}
+                              direction="row"
+                              flexGrow={1}
+                              alignItems="center"
+                            >
+                              <Box flexGrow={1}>
+                                <Typography>Key Result</Typography>
+                                <Typography
+                                  variant="body2"
+                                  color="text.disabled"
+                                >
+                                  Measures success for the Objective and
+                                  directly impacts its progress.
+                                </Typography>
+                              </Box>
+                              <ShowChartRoundedIcon htmlColor="rgb(5 169 244)" />
+                            </Stack>
+                          }
+                        />
+                      </Paper>
+                      <Paper
+                        variant="outlined"
+                        sx={{
+                          p: 2,
+                          '&:hover': {
+                            borderColor: 'text.primary',
+                          },
+                        }}
+                      >
+                        <FormControlLabel
+                          sx={{ display: 'flex' }}
+                          value={ObjectiveResultKind.Initiative}
+                          control={<Radio />}
+                          disableTypography
+                          label={
+                            <Stack
+                              spacing={2}
+                              direction="row"
+                              flexGrow={1}
+                              alignItems="center"
+                            >
+                              <Box flexGrow={1}>
+                                <Typography>Initiative</Typography>
+                                <Typography
+                                  variant="body2"
+                                  color="text.disabled"
+                                >
+                                  Supporting work that doesn&apos;t directly
+                                  affect the Objective&apos;s progress.
+                                </Typography>
+                              </Box>
+                              <PlaylistAddCheckRoundedIcon htmlColor="rgb(55 213 146)" />
+                            </Stack>
+                          }
+                        />
+                      </Paper>
+                    </Stack>
+                  </RadioGroup>
+                </FormControl>
+                <Accordion
+                  sx={{
+                    '::before': {
+                      height: 0,
                     },
                   }}
-                />
-                <TextField
-                  id="description"
-                  name="description"
-                  label="Description"
-                  value={values.description}
-                  onChange={handleChange}
-                  error={
-                    Boolean(touched.description) && Boolean(errors.description)
-                  }
-                  helperText={
-                    Boolean(touched.description) && errors.description
-                  }
-                  fullWidth
-                  multiline
-                  minRows={5}
-                />
+                  disableGutters
+                >
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreRoundedIcon />}
+                    sx={{ px: 0 }}
+                  >
+                    <Typography>Advanced Options</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails sx={{ px: 0 }}>
+                    <Stack spacing={2}>
+                      <DatePicker
+                        label="Start Date"
+                        value={
+                          values.startAt != null ? dayjs(values.startAt) : null
+                        }
+                        onChange={(value) => {
+                          setFieldValue('startAt', value?.format('YYYY-MM-DD'))
+                        }}
+                        slotProps={{
+                          textField: {
+                            error:
+                              Boolean(touched.startAt) &&
+                              Boolean(errors.startAt),
+                            helperText:
+                              Boolean(touched.startAt) && errors.startAt,
+                          },
+                        }}
+                      />
+                      <DatePicker
+                        label="Due Date"
+                        value={
+                          values.dueAt != null ? dayjs(values.dueAt) : null
+                        }
+                        onChange={(value) => {
+                          setFieldValue('dueAt', value?.format('YYYY-MM-DD'))
+                        }}
+                        slotProps={{
+                          textField: {
+                            error:
+                              Boolean(touched.dueAt) && Boolean(errors.dueAt),
+                            helperText: Boolean(touched.dueAt) && errors.dueAt,
+                          },
+                        }}
+                      />
+                      <TextField
+                        id="description"
+                        name="description"
+                        label="Description"
+                        value={values.description}
+                        onChange={handleChange}
+                        error={
+                          Boolean(touched.description) &&
+                          Boolean(errors.description)
+                        }
+                        helperText={
+                          Boolean(touched.description) && errors.description
+                        }
+                        fullWidth
+                        multiline
+                        minRows={5}
+                      />
+                    </Stack>
+                  </AccordionDetails>
+                </Accordion>
               </Stack>
             </DialogContent>
             <DialogActions>

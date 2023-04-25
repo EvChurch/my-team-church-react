@@ -4079,6 +4079,18 @@
             "deprecationReason": null
           },
           {
+            "name": "expiresAt",
+            "description": "time that token expires at",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601DateTime",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "token",
             "description": "token to use as Authorization header as: Bearer 'token'",
             "args": [],
