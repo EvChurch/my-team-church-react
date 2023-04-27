@@ -75,7 +75,7 @@ export default function Navigation({
       <Divider />
       <StyledAccount>
         <Avatar
-          avatar={data?.user.avatar ?? undefined}
+          src={data?.user.avatar ?? undefined}
           title={data?.user.title}
           type="user"
         />

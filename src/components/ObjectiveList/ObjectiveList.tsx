@@ -47,9 +47,13 @@ export default function ObjectiveList({
   status: initialStatus,
 }: Props): ReactElement {
   const [status, setStatus] = useState(initialStatus ?? Status.Active)
-  const { data, loading } = useQuery<ObjectivesQuery>(ObjectivesQueryDocument, {
-    variables: { teamId, status },
-  })
+  const { data, loading, refetch } = useQuery<ObjectivesQuery>(
+    ObjectivesQueryDocument,
+    {
+      variables: { teamId, status },
+      notifyOnNetworkStatusChange: true,
+    }
+  )
 
   const handleChange = (_event: SyntheticEvent, newValue: Status): void => {
     setStatus(newValue)
@@ -62,7 +66,10 @@ export default function ObjectiveList({
         teamId={teamId}
         contactId={data?.me?.contacts?.[0]?.id}
         open={open}
-        onClose={(objectiveId) => {
+        onClose={(id) => {
+          if (id != null) {
+            void refetch()
+          }
           setOpen(false)
         }}
       />
@@ -96,7 +103,16 @@ export default function ObjectiveList({
           data?.objectives.nodes?.length === 0 && (
             <CardContent sx={{ textAlign: 'center' }}>
               There are no goals in the current view. <br />
-              Start contributing by adding an <Link>Objective</Link>.
+              Start contributing by adding an{' '}
+              <Link
+                onClick={() => {
+                  setOpen(true)
+                }}
+                sx={{ cursor: 'pointer' }}
+              >
+                Objective
+              </Link>
+              .
             </CardContent>
           )}
         {!loading &&

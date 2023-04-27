@@ -138,7 +138,8 @@ export default function ObjectiveResultCreateDialog({
           const { data } = await objectiveResultCreate({
             variables: { input: values },
           })
-          data?.objectiveResultCreate?.result?.id != null && onClose?.()
+          const id = data?.objectiveResultCreate?.result?.id
+          id != null && onClose?.(id)
         }}
       >
         {({

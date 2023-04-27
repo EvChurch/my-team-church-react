@@ -38,10 +38,11 @@ interface Props {
 export default function ObjectiveResultList({
   objectiveId,
 }: Props): ReactElement {
-  const { data, loading } = useQuery<ObjectiveResultsQuery>(
+  const { data, loading, refetch } = useQuery<ObjectiveResultsQuery>(
     ObjectiveResultsQueryDocument,
     {
       variables: { objectiveId },
+      notifyOnNetworkStatusChange: true,
     }
   )
 
@@ -52,7 +53,10 @@ export default function ObjectiveResultList({
       <ObjectiveResultCreateDialog
         objectiveId={objectiveId}
         open={open}
-        onClose={() => {
+        onClose={(id) => {
+          if (id != null) {
+            void refetch()
+          }
           setOpen(false)
         }}
       />
