@@ -36,6 +36,9 @@ export const authOptions: NextAuthOptions = {
                   phoneNumber
                   remoteId
                   avatar
+                  contacts {
+                    id
+                  }
                 }
               }
             }

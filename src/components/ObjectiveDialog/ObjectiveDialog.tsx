@@ -45,6 +45,7 @@ const ObjectiveQueryDocument = graphql(`
       updatedAt
       progress
       percentage
+      ...ObjectiveResultListObjectiveFragment
     }
   }
 `)
@@ -133,7 +134,7 @@ export default function ObjectiveDialog({
           <ProgressLabel value={data?.objective.progress} />
         </Stack>
         {data?.objective.id != null && (
-          <ObjectiveResultList objectiveId={data?.objective.id} />
+          <ObjectiveResultList objective={data.objective} />
         )}
       </DialogContent>
     </Dialog>

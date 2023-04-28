@@ -246,6 +246,7 @@ export default function ObjectiveResultCreateDialog({
                     id="startValue"
                     name="startValue"
                     label="Start value"
+                    type="number"
                     value={values.startValue}
                     onChange={handleChange}
                     InputProps={{
@@ -275,6 +276,7 @@ export default function ObjectiveResultCreateDialog({
                     id="targetValue"
                     name="targetValue"
                     label="Target value"
+                    type="number"
                     value={values.targetValue}
                     onChange={handleChange}
                     InputProps={{

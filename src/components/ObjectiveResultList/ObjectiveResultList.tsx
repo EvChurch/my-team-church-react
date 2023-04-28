@@ -14,11 +14,20 @@ import {
 import { compact } from 'lodash'
 import { type ReactElement, useState } from 'react'
 
-import { graphql } from '../../gql'
+import { type FragmentType, graphql, useFragment } from '../../gql'
 import { type ObjectiveResultsQuery } from '../../gql/graphql'
 import ObjectiveResultCreateDialog from '../ObjectiveResultCreateDialog'
 
 import ObjectiveResultListItem from './ObjectiveResultListItem'
+
+const ObjectiveResultListObjectiveFragment = graphql(`
+  fragment ObjectiveResultListObjectiveFragment on Objective {
+    id
+    contact {
+      id
+    }
+  }
+`)
 
 const ObjectiveResultsQueryDocument = graphql(`
   query ObjectiveResults($objectiveId: [ID!]) {
@@ -32,16 +41,20 @@ const ObjectiveResultsQueryDocument = graphql(`
 `)
 
 interface Props {
-  objectiveId: string
+  objective: FragmentType<typeof ObjectiveResultListObjectiveFragment>
 }
 
 export default function ObjectiveResultList({
-  objectiveId,
+  objective: refObjective,
 }: Props): ReactElement {
+  const objective = useFragment(
+    ObjectiveResultListObjectiveFragment,
+    refObjective
+  )
   const { data, loading, refetch } = useQuery<ObjectiveResultsQuery>(
     ObjectiveResultsQueryDocument,
     {
-      variables: { objectiveId },
+      variables: { objectiveId: objective.id },
       notifyOnNetworkStatusChange: true,
     }
   )
@@ -51,7 +64,8 @@ export default function ObjectiveResultList({
   return (
     <>
       <ObjectiveResultCreateDialog
-        objectiveId={objectiveId}
+        objectiveId={objective.id}
+        contactId={objective.contact.id}
         open={open}
         onClose={(id) => {
           if (id != null) {
