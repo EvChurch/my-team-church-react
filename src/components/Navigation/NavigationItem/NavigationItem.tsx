@@ -1,7 +1,7 @@
 import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { usePathname } from 'next/navigation'
 import { type ReactElement, type ReactNode } from 'react'
 
 const StyledNavItem = styled(ListItemButton)(({ theme }) => ({
@@ -34,7 +34,7 @@ interface Props {
 }
 
 export default function NavItem({ title, href, icon }: Props): ReactElement {
-  const { pathname } = useRouter()
+  const pathname = usePathname()
   return (
     <Link passHref href={href} legacyBehavior>
       <StyledNavItem disableGutters selected={pathname === href}>

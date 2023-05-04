@@ -9,7 +9,7 @@ import {
 } from '@mui/material'
 import { Formik } from 'formik'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
+import { useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { type ReactElement, useState } from 'react'
 import { object, string } from 'yup'
@@ -20,7 +20,7 @@ import login from './login.png'
 
 export default function Login(): ReactElement {
   const [showError, setShowError] = useState(false)
-  const { query } = useRouter()
+  const searchParams = useSearchParams()
 
   return (
     <Box sx={{ display: { md: 'flex' } }}>
@@ -93,8 +93,7 @@ export default function Login(): ReactElement {
                 ...values,
               })
               if (response?.ok === true) {
-                window.location.href =
-                  (query.callback as string | undefined) ?? '/'
+                window.location.href = searchParams.get('callback') ?? '/'
               } else {
                 setShowError(true)
               }

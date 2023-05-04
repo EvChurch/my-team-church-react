@@ -8,7 +8,8 @@ import {
   useMediaQuery,
 } from '@mui/material'
 import { type Theme, styled } from '@mui/material/styles'
-import { useRouter } from 'next/router'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { type ReactElement, useEffect } from 'react'
 
@@ -36,7 +37,7 @@ export default function Navigation({
   onCloseNav,
 }: Props): ReactElement {
   const isDesktop = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'))
-  const { pathname } = useRouter()
+  const pathname = usePathname()
   const { data } = useSession()
 
   useEffect(() => {
@@ -60,13 +61,15 @@ export default function Navigation({
       }}
     >
       <Box sx={{ px: 2.5, py: 3, display: 'inline-flex' }}>
-        <Logo />
+        <Link href="/">
+          <Logo />
+        </Link>
       </Box>
       <Box>
         <List disablePadding sx={{ p: 1 }} component="nav">
           <NavigationItem
             title="Dashboard"
-            href="/"
+            href="/dashboard"
             icon={<InsightsRoundedIcon />}
           />
         </List>

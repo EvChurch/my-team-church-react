@@ -3,7 +3,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import type { Preview } from '@storybook/react'
 import { SessionProvider } from 'next-auth/react'
-import { DefaultSeo } from 'next-seo'
 import React from 'react'
 
 import AppProvider from '../src/components/AppProvider'
@@ -29,7 +28,6 @@ const preview: Preview = {
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-nz">
           <SessionProvider>
             <AppProvider emotionCache={createEmotionCache()}>
-              <DefaultSeo defaultTitle="My Team" titleTemplate="%s | My Team" />
               <Story />
             </AppProvider>
           </SessionProvider>

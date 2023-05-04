@@ -1,3 +1,5 @@
+'use client'
+
 import { styled } from '@mui/material/styles'
 import { type ReactElement, type ReactNode, useState } from 'react'
 
@@ -30,7 +32,7 @@ interface Props {
   children: ReactNode
 }
 
-export default function Layout({ children }: Props): ReactElement {
+export default function DashboardLayout({ children }: Props): ReactElement {
   const [open, setOpen] = useState(false)
 
   return (
