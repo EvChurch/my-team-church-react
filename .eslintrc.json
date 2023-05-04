@@ -8,6 +8,8 @@
     "next/core-web-vitals",
     "plugin:import/recommended",
     "plugin:import/typescript",
+    "plugin:storybook/recommended",
+    "plugin:@next/next/recommended",
     "standard-with-typescript",
     "prettier"
   ],
@@ -38,5 +40,9 @@
       "node": true
     }
   },
-  "ignorePatterns": ["src/gql/fragment-masking.ts"]
+  "ignorePatterns": [
+    "src/gql/fragment-masking.ts",
+    "next-env.d.ts",
+    "!.storybook"
+  ]
 }

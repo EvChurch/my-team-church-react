@@ -32,27 +32,26 @@ function stringAvatar(
 ): AvatarProps {
   if (title == null) return {}
 
+  const [firstName, lastName] = title.split(' ')
+
   return {
     sx: {
       ...sx,
       bgcolor: titleToColor(title),
     },
-    children: `${title.split(' ')[0][0]}${title.split(' ')[1][0]}`,
+    children: `${firstName?.[0] ?? ''}${lastName?.[0] ?? ''}`,
   }
 }
 
 interface Props extends AvatarProps {
+  /** The name of contact */
   title?: string
+  /** URL pointing to avatar image of contact */
   src?: string
-  type: 'contact' | 'user'
 }
 
-export default function Avatar({
-  title,
-  src,
-  type,
-  ...other
-}: Props): ReactElement {
+/** Tooltip wrapped avatar with contact initials when no image */
+export default function Avatar({ title, src, ...other }: Props): ReactElement {
   return (
     <Tooltip title={title} arrow>
       <MuiAvatar src={src} {...other} {...stringAvatar(title, other.sx)} />

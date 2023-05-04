@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react'
 import { type ReactElement } from 'react'
 
 import { graphql } from '../../gql'
-import { type MeQuery, Status, type TeamsQuery } from '../../gql/graphql'
+import { Status, type TeamsQuery } from '../../gql/graphql'
 import ObjectiveList from '../ObjectiveList'
 import TeamList from '../TeamList'
 

@@ -27,8 +27,8 @@ const StyledAccount = styled('div')(({ theme }) => ({
 }))
 
 interface Props {
-  openNav: boolean
-  onCloseNav: () => void
+  openNav?: boolean
+  onCloseNav?: () => void
 }
 
 export default function Navigation({
@@ -40,8 +40,8 @@ export default function Navigation({
   const { data } = useSession()
 
   useEffect(() => {
-    if (openNav) {
-      onCloseNav()
+    if (openNav === true) {
+      onCloseNav?.()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname])
@@ -74,11 +74,7 @@ export default function Navigation({
       <Box sx={{ flexGrow: 1 }} />
       <Divider />
       <StyledAccount>
-        <Avatar
-          src={data?.user.avatar ?? undefined}
-          title={data?.user.title}
-          type="user"
-        />
+        <Avatar src={data?.user.avatar ?? undefined} title={data?.user.title} />
         <Box sx={{ ml: 2 }}>
           <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
             {data?.user.title}

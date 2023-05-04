@@ -47,11 +47,7 @@ export default function AccountPopover(): ReactElement {
             : {}),
         }}
       >
-        <Avatar
-          src={data?.user.avatar ?? undefined}
-          title={data?.user.title}
-          type="user"
-        />
+        <Avatar src={data?.user.avatar ?? undefined} title={data?.user.title} />
       </IconButton>
 
       <Popover

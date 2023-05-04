@@ -64,7 +64,7 @@ export default function Login(): ReactElement {
         }}
       >
         <Container>
-          <Logo />
+          <Logo sx={{ display: { xs: 'none', md: 'block' } }} />
           <Typography variant="h4" gutterBottom>
             Log in to your Account
           </Typography>
@@ -78,11 +78,15 @@ export default function Login(): ReactElement {
           )}
           <Formik
             validationSchema={object({
-              username: string().required(),
+              username: string().email().required().label('email address'),
               password: string().required(),
               accountSlug: string().required(),
             })}
-            initialValues={{ username: '', password: '', accountSlug: '' }}
+            initialValues={{
+              username: '',
+              password: '',
+              accountSlug: 'auckland-ev',
+            }}
             onSubmit={async (values) => {
               const response = await signIn('credentials', {
                 redirect: false,
@@ -117,6 +121,7 @@ export default function Login(): ReactElement {
                     error={
                       touched.username === true && Boolean(errors.username)
                     }
+                    helperText={Boolean(touched.username) && errors.username}
                   />
                   <TextField
                     fullWidth
@@ -129,6 +134,7 @@ export default function Login(): ReactElement {
                     error={
                       touched.password === true && Boolean(errors.password)
                     }
+                    helperText={Boolean(touched.password) && errors.password}
                   />
                   <TextField
                     fullWidth
@@ -141,6 +147,9 @@ export default function Login(): ReactElement {
                       touched.accountSlug === true &&
                       Boolean(errors.accountSlug)
                     }
+                    helperText={
+                      Boolean(touched.accountSlug) && errors.accountSlug
+                    }
                   />
                 </Stack>
                 <LoadingButton
@@ -148,7 +157,7 @@ export default function Login(): ReactElement {
                   variant="contained"
                   fullWidth
                   type="submit"
-                  disabled={isSubmitting || !isValid}
+                  disabled={isSubmitting}
                   size="large"
                 >
                   Log in
