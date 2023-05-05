@@ -70,7 +70,6 @@ export default function ObjectiveListItem({
                   <Avatar
                     src={objective.contact.avatar ?? undefined}
                     title={objective.contact.title}
-                    type="contact"
                     sx={{ width: 20, height: 20, fontSize: '1rem' }}
                   />
                   <Typography variant="body2">

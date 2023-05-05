@@ -52,7 +52,6 @@ export default function MemberList({ teamId }: Props): ReactElement {
           <Avatar
             src={params.value ?? undefined}
             title={params.row.title}
-            type="contact"
             sx={{ width: 34, height: 34, fontSize: '1rem' }}
           />
         )

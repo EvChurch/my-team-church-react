@@ -60,12 +60,7 @@ export default function TeamListItem({ team: refTeam }: Props): ReactElement {
                     ),
                     'title'
                   ).map(({ id, avatar, title }) => (
-                    <Avatar
-                      key={id}
-                      title={title}
-                      src={avatar ?? undefined}
-                      type="contact"
-                    />
+                    <Avatar key={id} title={title} src={avatar ?? undefined} />
                   ))}
                 </AvatarGroup>
               </Divider>

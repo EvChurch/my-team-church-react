@@ -74,7 +74,6 @@ export default function ObjectiveResultListItem({
         <Avatar
           src={result.contact.avatar ?? undefined}
           title={result.contact.title}
-          type="contact"
           sx={{ width: 30, height: 30, fontSize: '1rem' }}
         />
         <Typography sx={{ fontWeight: 'bold', flexGrow: 1 }} noWrap>
