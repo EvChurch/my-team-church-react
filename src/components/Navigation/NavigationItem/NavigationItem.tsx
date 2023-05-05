@@ -37,7 +37,7 @@ export default function NavItem({ title, href, icon }: Props): ReactElement {
   const { pathname } = useRouter()
   return (
     <Link passHref href={href} legacyBehavior>
-      <StyledNavItem disableGutters selected={pathname === href}>
+      <StyledNavItem disableGutters selected={pathname.startsWith(href)}>
         <StyledNavItemIcon>{icon}</StyledNavItemIcon>
         <ListItemText disableTypography primary={title} />
       </StyledNavItem>

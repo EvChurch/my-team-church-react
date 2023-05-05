@@ -1,13 +1,15 @@
 import { NextSeo } from 'next-seo'
-import { type ReactElement } from 'react'
+import { type ReactElement, type ReactNode } from 'react'
 
-import Dashboard from '../src/components/Dashboard'
+import Home from '../src/components/Home'
 
-export default function DashboardPage(): ReactElement {
+export default function HomePage(): ReactElement {
   return (
     <>
-      <NextSeo title="Dashboard" />
-      <Dashboard />
+      <NextSeo title="Home" />
+      <Home />
     </>
   )
 }
+
+HomePage.getLayout = (page: ReactNode) => page

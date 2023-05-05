@@ -1,3 +1,4 @@
+import Groups2RoundedIcon from '@mui/icons-material/Groups2Rounded'
 import InsightsRoundedIcon from '@mui/icons-material/InsightsRounded'
 import {
   Box,
@@ -66,8 +67,13 @@ export default function Navigation({
         <List disablePadding sx={{ p: 1 }} component="nav">
           <NavigationItem
             title="Dashboard"
-            href="/"
+            href="/dashboard"
             icon={<InsightsRoundedIcon />}
+          />
+          <NavigationItem
+            title="Teams"
+            href="/teams"
+            icon={<Groups2RoundedIcon />}
           />
         </List>
       </Box>

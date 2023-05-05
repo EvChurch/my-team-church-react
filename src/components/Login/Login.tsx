@@ -94,7 +94,7 @@ export default function Login(): ReactElement {
               })
               if (response?.ok === true) {
                 window.location.href =
-                  (query.callback as string | undefined) ?? '/'
+                  (query.callback as string | undefined) ?? '/dashboard'
               } else {
                 setShowError(true)
               }
