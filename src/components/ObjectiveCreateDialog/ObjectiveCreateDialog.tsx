@@ -221,7 +221,6 @@ export default function ObjectiveCreateDialog({
                       <Avatar
                         src={option.avatar ?? undefined}
                         title={option.title}
-                        type="user"
                         sx={{ mr: 2, flexShrink: 0 }}
                       />
                       {option.title}
