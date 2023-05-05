@@ -10,7 +10,7 @@ export default function useApolloClient(
   apiToken?: string | null
 ): ApolloClient<NormalizedCacheObject> {
   const httpLink = createHttpLink({
-    uri: 'http://localhost:5000/graphql',
+    uri: process.env.NEXT_PUBLIC_API_URL,
   })
 
   const authLink = setContext((_, { headers }) => {

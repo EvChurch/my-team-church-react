@@ -67,7 +67,7 @@ export default function Home(): ReactElement {
           </Stack>
         </Container>
       </Box>
-      <Box component="section" py={10}>
+      <Box component="section" py={5}>
         <Container>
           <Stack
             direction={{ sx: 'column', md: 'row' }}
@@ -105,7 +105,7 @@ export default function Home(): ReactElement {
           </Stack>
         </Container>
       </Box>
-      <Box component="section" py={10} bgcolor="#fcfcfc">
+      <Box component="section" py={5} bgcolor="#fcfcfc">
         <Container>
           <Stack
             direction={{ sx: 'column', md: 'row' }}
@@ -150,7 +150,7 @@ export default function Home(): ReactElement {
           </Stack>
         </Container>
       </Box>
-      <Box component="section" py={10}>
+      <Box component="section" py={5}>
         <Container>
           <Stack
             direction={{ sx: 'column', md: 'row' }}
@@ -193,7 +193,7 @@ export default function Home(): ReactElement {
           </Stack>
         </Container>
       </Box>
-      <Box component="section" py={10} bgcolor="#fcfcfc">
+      <Box component="section" py={5} bgcolor="#fcfcfc">
         <Container>
           <Stack
             direction={{ sx: 'column', md: 'row' }}
