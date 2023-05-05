@@ -111,7 +111,6 @@ export default function ObjectiveDialog({
             <Avatar
               src={data?.objective.contact.avatar ?? undefined}
               title={data?.objective.contact.title}
-              type="contact"
               sx={{ width: 20, height: 20, fontSize: '1rem' }}
             />
             <Typography variant="body2" noWrap>
