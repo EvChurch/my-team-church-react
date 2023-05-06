@@ -20,6 +20,7 @@ export const authOptions: NextAuthOptions = {
         const client = new ApolloClient({
           uri: process.env.NEXT_PUBLIC_API_URL,
           cache: new InMemoryCache(),
+          connectToDevTools: true,
         })
         const response = await client.mutate<UserLoginMutation>({
           mutation: gql`

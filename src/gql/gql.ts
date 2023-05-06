@@ -22,11 +22,13 @@ const documents = {
     "\n  query Objective($id: ID!) {\n    objective(id: $id) {\n      contact {\n        id\n        avatar\n        title\n      }\n      team {\n        id\n        title\n      }\n      createdAt\n      dueAt\n      id\n      status\n      title\n      updatedAt\n      progress\n      percentage\n      ...ObjectiveResultListObjectiveFragment\n    }\n  }\n": types.ObjectiveDocument,
     "\n  query Objectives($teamId: ID, $status: Status) {\n    objectives(teamId: $teamId, status: $status) {\n      nodes {\n        id\n        ...ObjectiveListItemObjectiveFragment\n      }\n    }\n    me {\n      id\n      contacts {\n        id\n      }\n    }\n  }\n": types.ObjectivesDocument,
     "\n  fragment ObjectiveListItemObjectiveFragment on Objective {\n    contact {\n      id\n      avatar\n      title\n    }\n    createdAt\n    dueAt\n    id\n    status\n    title\n    updatedAt\n    percentage\n    progress\n  }\n": types.ObjectiveListItemObjectiveFragmentFragmentDoc,
+    "\n  mutation ObjectiveDelete($id: ID!) {\n    objectiveDelete(input: { id: $id }) {\n      id\n    }\n  }\n": types.ObjectiveDeleteDocument,
     "\n  query ObjectiveTeamContactNamesAndObjectives($objectiveId: ID!) {\n    objective(id: $objectiveId) {\n      id\n      team {\n        id\n        contacts {\n          id\n          title\n          avatar\n          slug\n        }\n        objectives {\n          id\n          title\n        }\n      }\n    }\n  }\n": types.ObjectiveTeamContactNamesAndObjectivesDocument,
     "\n  mutation ObjectiveResultCreate($input: ObjectiveResultInput!) {\n    objectiveResultCreate(input: { result: $input }) {\n      result {\n        id\n      }\n    }\n  }\n": types.ObjectiveResultCreateDocument,
     "\n  fragment ObjectiveResultListObjectiveFragment on Objective {\n    id\n    contact {\n      id\n    }\n  }\n": types.ObjectiveResultListObjectiveFragmentFragmentDoc,
     "\n  query ObjectiveResults($objectiveId: [ID!]) {\n    objectiveResults(objectiveId: $objectiveId) {\n      nodes {\n        id\n        ...ObjectiveResultListItemObjectiveResultFragment\n      }\n    }\n  }\n": types.ObjectiveResultsDocument,
     "\n  fragment ObjectiveResultListItemObjectiveResultFragment on ObjectiveResult {\n    contact {\n      id\n      avatar\n      title\n    }\n    createdAt\n    dueAt\n    id\n    status\n    title\n    updatedAt\n    percentage\n    progress\n    kind\n    objective {\n      id\n    }\n    ...ObjectiveActivityCreateDialogResultFragment\n  }\n": types.ObjectiveResultListItemObjectiveResultFragmentFragmentDoc,
+    "\n  mutation ObjectiveResultDelete($id: ID!) {\n    objectiveResultDelete(input: { id: $id }) {\n      id\n    }\n  }\n": types.ObjectiveResultDeleteDocument,
     "\n  query Members($teamId: ID!) {\n    contacts(teamId: $teamId) {\n      nodes {\n        id\n        avatar\n        firstName\n        lastName\n        title\n      }\n    }\n  }\n": types.MembersDocument,
     "\n  query Team($id: ID!) {\n    team(id: $id) {\n      id\n      title\n      contacts {\n        id\n        avatar\n        firstName\n        lastName\n        title\n      }\n    }\n  }\n": types.TeamDocument,
     "\n  fragment TeamListTeamFragment on Team {\n    id\n    title\n    status\n    definition\n    ...TeamListItemTeamFragment\n  }\n": types.TeamListTeamFragmentFragmentDoc,
@@ -86,6 +88,10 @@ export function graphql(source: "\n  fragment ObjectiveListItemObjectiveFragment
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  mutation ObjectiveDelete($id: ID!) {\n    objectiveDelete(input: { id: $id }) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation ObjectiveDelete($id: ID!) {\n    objectiveDelete(input: { id: $id }) {\n      id\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  query ObjectiveTeamContactNamesAndObjectives($objectiveId: ID!) {\n    objective(id: $objectiveId) {\n      id\n      team {\n        id\n        contacts {\n          id\n          title\n          avatar\n          slug\n        }\n        objectives {\n          id\n          title\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query ObjectiveTeamContactNamesAndObjectives($objectiveId: ID!) {\n    objective(id: $objectiveId) {\n      id\n      team {\n        id\n        contacts {\n          id\n          title\n          avatar\n          slug\n        }\n        objectives {\n          id\n          title\n        }\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -103,6 +109,10 @@ export function graphql(source: "\n  query ObjectiveResults($objectiveId: [ID!])
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  fragment ObjectiveResultListItemObjectiveResultFragment on ObjectiveResult {\n    contact {\n      id\n      avatar\n      title\n    }\n    createdAt\n    dueAt\n    id\n    status\n    title\n    updatedAt\n    percentage\n    progress\n    kind\n    objective {\n      id\n    }\n    ...ObjectiveActivityCreateDialogResultFragment\n  }\n"): (typeof documents)["\n  fragment ObjectiveResultListItemObjectiveResultFragment on ObjectiveResult {\n    contact {\n      id\n      avatar\n      title\n    }\n    createdAt\n    dueAt\n    id\n    status\n    title\n    updatedAt\n    percentage\n    progress\n    kind\n    objective {\n      id\n    }\n    ...ObjectiveActivityCreateDialogResultFragment\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation ObjectiveResultDelete($id: ID!) {\n    objectiveResultDelete(input: { id: $id }) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation ObjectiveResultDelete($id: ID!) {\n    objectiveResultDelete(input: { id: $id }) {\n      id\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

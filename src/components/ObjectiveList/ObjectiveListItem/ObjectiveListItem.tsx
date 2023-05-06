@@ -1,9 +1,27 @@
+import { useMutation } from '@apollo/client'
 import CalendarTodayRoundedIcon from '@mui/icons-material/CalendarTodayRounded'
-import { Card, CardContent, Link, Stack, Typography } from '@mui/material'
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded'
+import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded'
+import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded'
+import {
+  Box,
+  Card,
+  CardContent,
+  Divider,
+  IconButton,
+  Link,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Stack,
+  Typography,
+} from '@mui/material'
 import dayjs from 'dayjs'
-import { type ReactElement, useState } from 'react'
+import { type MouseEvent, type ReactElement, useState } from 'react'
 
 import { type FragmentType, graphql, useFragment } from '../../../gql'
+import { type ObjectiveDeleteMutation } from '../../../gql/graphql'
 import Avatar from '../../Avatar'
 import CircularProgressWithLabel from '../../CircularProgressWithLabel'
 import ObjectiveDialog from '../../ObjectiveDialog'
@@ -27,6 +45,14 @@ const ObjectiveListItemObjectiveFragment = graphql(`
   }
 `)
 
+const ObjectiveDeleteMutationDocument = graphql(`
+  mutation ObjectiveDelete($id: ID!) {
+    objectiveDelete(input: { id: $id }) {
+      id
+    }
+  }
+`)
+
 interface Props {
   objective: FragmentType<typeof ObjectiveListItemObjectiveFragment>
 }
@@ -38,6 +64,20 @@ export default function ObjectiveListItem({
   const objective = useFragment(
     ObjectiveListItemObjectiveFragment,
     refObjective
+  )
+  const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
+  const menuOpen = Boolean(menuAnchorEl)
+  function handleMenuClick(event: MouseEvent<HTMLElement>): void {
+    setMenuAnchorEl(event.currentTarget)
+  }
+  function handleMenuClose(): void {
+    setMenuAnchorEl(null)
+  }
+  const [objectiveDelete] = useMutation<ObjectiveDeleteMutation>(
+    ObjectiveDeleteMutationDocument,
+    {
+      variables: { id: objective.id },
+    }
   )
 
   return (
@@ -60,7 +100,10 @@ export default function ObjectiveListItem({
                   }}
                   color="textPrimary"
                   underline="none"
-                  sx={{ cursor: 'pointer' }}
+                  sx={{
+                    cursor: 'pointer',
+                    '&:hover': { color: 'primary.main' },
+                  }}
                 >
                   {objective.title}
                 </Link>
@@ -92,6 +135,54 @@ export default function ObjectiveListItem({
             >
               <CircularProgressWithLabel value={objective.percentage} />
               <ProgressLabel value={objective.progress} />
+              <Box display="flex" alignItems="center">
+                <IconButton
+                  aria-label="more"
+                  id={`${objective.id}-menu-button`}
+                  aria-controls={menuOpen ? `${objective.id}-menu` : undefined}
+                  aria-expanded={menuOpen ? 'true' : undefined}
+                  aria-haspopup="true"
+                  onClick={handleMenuClick}
+                >
+                  <MoreVertRoundedIcon />
+                </IconButton>
+              </Box>
+              <Menu
+                id={`${objective.id}-menu`}
+                MenuListProps={{
+                  'aria-labelledby': `${objective.id}-menu-button`,
+                  dense: true,
+                }}
+                anchorEl={menuAnchorEl}
+                open={menuOpen}
+                onClose={handleMenuClose}
+                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+              >
+                <MenuItem
+                  onClick={() => {
+                    setOpen(true)
+                    handleMenuClose()
+                  }}
+                >
+                  <ListItemIcon>
+                    <VisibilityRoundedIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>View</ListItemText>
+                </MenuItem>
+                <Divider />
+                <MenuItem
+                  onClick={() => {
+                    void objectiveDelete()
+                    handleMenuClose()
+                  }}
+                >
+                  <ListItemIcon>
+                    <DeleteRoundedIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>Delete</ListItemText>
+                </MenuItem>
+              </Menu>
             </Stack>
           </Stack>
         </CardContent>

@@ -25,6 +25,7 @@ export default function useApolloClient(
   const client = new ApolloClient({
     link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
+    connectToDevTools: true,
   })
   return client
 }

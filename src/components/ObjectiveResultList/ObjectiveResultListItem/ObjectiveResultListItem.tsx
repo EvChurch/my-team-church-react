@@ -1,12 +1,30 @@
+import { useMutation } from '@apollo/client'
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded'
+import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded'
 import PlaylistAddCheckRoundedIcon from '@mui/icons-material/PlaylistAddCheckRounded'
 import PostAddRoundedIcon from '@mui/icons-material/PostAddRounded'
 import ShowChartRoundedIcon from '@mui/icons-material/ShowChartRounded'
-import { IconButton, Link, Stack, Tooltip, Typography } from '@mui/material'
+import {
+  Box,
+  Divider,
+  IconButton,
+  Link,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@mui/material'
 import { useSession } from 'next-auth/react'
-import { type ReactElement, useState } from 'react'
+import { type MouseEvent, type ReactElement, useState } from 'react'
 
 import { type FragmentType, graphql, useFragment } from '../../../gql'
-import { ObjectiveResultKind } from '../../../gql/graphql'
+import {
+  type ObjectiveResultDeleteMutation,
+  ObjectiveResultKind,
+} from '../../../gql/graphql'
 import Avatar from '../../Avatar'
 import CircularProgressWithLabel from '../../CircularProgressWithLabel/CircularProgressWithLabel'
 import ObjectiveActivityCreateDialog from '../../ObjectiveActivityCreateDialog/ObjectiveActivityCreateDialog'
@@ -35,6 +53,14 @@ const ObjectiveResultListItemObjectiveResultFragment = graphql(`
   }
 `)
 
+const ObjectiveResultDeleteMutationDocument = graphql(`
+  mutation ObjectiveResultDelete($id: ID!) {
+    objectiveResultDelete(input: { id: $id }) {
+      id
+    }
+  }
+`)
+
 interface Props {
   result: FragmentType<typeof ObjectiveResultListItemObjectiveResultFragment>
 }
@@ -48,6 +74,18 @@ export default function ObjectiveResultListItem({
     refResult
   )
   const { data } = useSession()
+  const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null)
+  const menuOpen = Boolean(menuAnchorEl)
+  function handleMenuClick(event: MouseEvent<HTMLElement>): void {
+    setMenuAnchorEl(event.currentTarget)
+  }
+  function handleMenuClose(): void {
+    setMenuAnchorEl(null)
+  }
+  const [objectiveResultDelete] = useMutation<ObjectiveResultDeleteMutation>(
+    ObjectiveResultDeleteMutationDocument,
+    { variables: { id: result.id } }
+  )
 
   return (
     <>
@@ -97,6 +135,54 @@ export default function ObjectiveResultListItem({
         >
           <PostAddRoundedIcon />
         </IconButton>
+        <Box display="flex" alignItems="center">
+          <IconButton
+            aria-label="more"
+            id={`${result.id}-menu-button`}
+            aria-controls={menuOpen ? `${result.id}-menu` : undefined}
+            aria-expanded={menuOpen ? 'true' : undefined}
+            aria-haspopup="true"
+            onClick={handleMenuClick}
+          >
+            <MoreVertRoundedIcon />
+          </IconButton>
+        </Box>
+        <Menu
+          id={`${result.id}-menu`}
+          MenuListProps={{
+            'aria-labelledby': `${result.id}-menu-button`,
+            dense: true,
+          }}
+          anchorEl={menuAnchorEl}
+          open={menuOpen}
+          onClose={handleMenuClose}
+          transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        >
+          <MenuItem
+            onClick={() => {
+              setOpen(true)
+              handleMenuClose()
+            }}
+          >
+            <ListItemIcon>
+              <PostAddRoundedIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Update Progress</ListItemText>
+          </MenuItem>
+          <Divider />
+          <MenuItem
+            onClick={() => {
+              void objectiveResultDelete()
+              handleMenuClose()
+            }}
+          >
+            <ListItemIcon>
+              <DeleteRoundedIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Delete</ListItemText>
+          </MenuItem>
+        </Menu>
       </Stack>
     </>
   )
