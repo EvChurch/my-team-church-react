@@ -60,6 +60,7 @@ export const authOptions: NextAuthOptions = {
             apiToken: response.data?.userLogin?.apiToken,
           }
         }
+        console.log(JSON.stringify(response))
         return null
       },
     }),
