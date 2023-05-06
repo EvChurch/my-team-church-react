@@ -63,10 +63,12 @@ const ObjectiveResultDeleteMutationDocument = graphql(`
 
 interface Props {
   result: FragmentType<typeof ObjectiveResultListItemObjectiveResultFragment>
+  refetch?: () => void
 }
 
 export default function ObjectiveResultListItem({
   result: refResult,
+  refetch,
 }: Props): ReactElement {
   const [open, setOpen] = useState(false)
   const result = useFragment(
@@ -173,8 +175,12 @@ export default function ObjectiveResultListItem({
           <Divider />
           <MenuItem
             onClick={() => {
-              void objectiveResultDelete()
               handleMenuClose()
+              void objectiveResultDelete({
+                onCompleted() {
+                  refetch?.()
+                },
+              })
             }}
           >
             <ListItemIcon>

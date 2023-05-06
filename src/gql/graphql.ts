@@ -430,8 +430,6 @@ export type ObjectiveResultDeleteMutationPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   /** id of result after delete */
   id?: Maybe<Scalars['ID']>;
-  /** objective of result after delete */
-  objective?: Maybe<Scalars['ID']>;
 };
 
 /** An edge in a connection. */

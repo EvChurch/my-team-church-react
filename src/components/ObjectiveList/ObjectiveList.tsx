@@ -120,7 +120,13 @@ export default function ObjectiveList({
           data?.objectives.nodes?.length > 0 && (
             <Stack spacing={2} p={2}>
               {compact(data?.objectives.nodes).map((objective) => (
-                <ObjectiveListItem key={objective.id} objective={objective} />
+                <ObjectiveListItem
+                  key={objective.id}
+                  objective={objective}
+                  refetch={() => {
+                    void refetch()
+                  }}
+                />
               ))}
             </Stack>
           )}

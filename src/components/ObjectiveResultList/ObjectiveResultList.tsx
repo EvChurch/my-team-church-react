@@ -117,7 +117,13 @@ export default function ObjectiveResultList({
           data?.objectiveResults.nodes?.length > 0 && (
             <Stack spacing={2} p={2}>
               {compact(data?.objectiveResults.nodes).map((result) => (
-                <ObjectiveResultListItem key={result.id} result={result} />
+                <ObjectiveResultListItem
+                  key={result.id}
+                  result={result}
+                  refetch={() => {
+                    void refetch()
+                  }}
+                />
               ))}
             </Stack>
           )}
