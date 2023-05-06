@@ -2,6 +2,7 @@ import { useMutation } from '@apollo/client'
 import CalendarTodayRoundedIcon from '@mui/icons-material/CalendarTodayRounded'
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded'
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded'
+import ShowChartRoundedIcon from '@mui/icons-material/ShowChartRounded'
 import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded'
 import {
   Box,
@@ -92,7 +93,7 @@ export default function ObjectiveListItem({
         id={objective.id}
       />
       <Card>
-        <CardContent>
+        <CardContent sx={{ display: { xs: 'none', sm: 'block' } }}>
           <Stack direction="row">
             <Stack flexGrow={1}>
               <Typography sx={{ fontWeight: 'bold' }} gutterBottom>
@@ -149,50 +150,106 @@ export default function ObjectiveListItem({
                   <MoreVertRoundedIcon />
                 </IconButton>
               </Box>
-              <Menu
-                id={`${objective.id}-menu`}
-                MenuListProps={{
-                  'aria-labelledby': `${objective.id}-menu-button`,
-                  dense: true,
-                }}
-                anchorEl={menuAnchorEl}
-                open={menuOpen}
-                onClose={handleMenuClose}
-                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-              >
-                <MenuItem
-                  onClick={() => {
-                    setOpen(true)
-                    handleMenuClose()
-                  }}
-                >
-                  <ListItemIcon>
-                    <VisibilityRoundedIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText>View</ListItemText>
-                </MenuItem>
-                <Divider />
-                <MenuItem
-                  onClick={() => {
-                    handleMenuClose()
-                    void objectiveDelete({
-                      onCompleted() {
-                        refetch?.()
-                      },
-                    })
-                  }}
-                >
-                  <ListItemIcon>
-                    <DeleteRoundedIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText>Delete</ListItemText>
-                </MenuItem>
-              </Menu>
             </Stack>
           </Stack>
         </CardContent>
+        <CardContent sx={{ display: { xs: 'block', sm: 'none' } }}>
+          <Stack
+            direction="row"
+            alignItems="center"
+            sx={{ minWidth: 0 }}
+            spacing={1}
+          >
+            <ProgressLabel value={objective.progress} noText />
+            <Typography sx={{ fontWeight: 'bold', flex: 1 }} noWrap>
+              <Link
+                onClick={() => {
+                  setOpen(true)
+                }}
+                color="textPrimary"
+                underline="none"
+                sx={{
+                  cursor: 'pointer',
+                  '&:hover': { color: 'primary.main' },
+                }}
+              >
+                {objective.title}
+              </Link>
+            </Typography>
+            <Box display="flex" alignItems="center">
+              <IconButton
+                aria-label="more"
+                id={`${objective.id}-menu-button`}
+                aria-controls={menuOpen ? `${objective.id}-menu` : undefined}
+                aria-expanded={menuOpen ? 'true' : undefined}
+                aria-haspopup="true"
+                onClick={handleMenuClick}
+              >
+                <MoreVertRoundedIcon />
+              </IconButton>
+            </Box>
+          </Stack>
+          <Stack direction="row" spacing={1} alignItems="center" sx={{ pt: 2 }}>
+            <Avatar
+              src={objective.contact.avatar ?? undefined}
+              title={objective.contact.title}
+              sx={{ width: 20, height: 20, fontSize: '1rem' }}
+            />
+            <Typography variant="body2">{objective.contact.title}</Typography>
+            <CalendarTodayRoundedIcon sx={{ width: 20, height: 20 }} />
+            <Typography variant="body2">
+              {dayjs(objective.dueAt).format('MMM D')}
+            </Typography>
+            <ShowChartRoundedIcon
+              htmlColor="rgb(5 169 244)"
+              sx={{ width: 20, height: 20 }}
+            />
+            <Typography variant="body2">
+              {`${Math.round(objective.percentage ?? 0)}%`}
+            </Typography>
+          </Stack>
+        </CardContent>
       </Card>
+      <Menu
+        id={`${objective.id}-menu`}
+        MenuListProps={{
+          'aria-labelledby': `${objective.id}-menu-button`,
+          dense: true,
+        }}
+        anchorEl={menuAnchorEl}
+        open={menuOpen}
+        onClose={handleMenuClose}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+        <MenuItem
+          onClick={() => {
+            setOpen(true)
+            handleMenuClose()
+          }}
+        >
+          <ListItemIcon>
+            <VisibilityRoundedIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>View</ListItemText>
+        </MenuItem>
+        <Divider />
+        <MenuItem
+          onClick={() => {
+            handleMenuClose()
+            void objectiveDelete({
+              onCompleted() {
+                refetch?.()
+              },
+            })
+          }}
+        >
+          <ListItemIcon>
+            <DeleteRoundedIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Delete</ListItemText>
+        </MenuItem>
+      </Menu>
     </>
   )
 }
