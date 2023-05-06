@@ -145,7 +145,7 @@ export default function Home(): ReactElement {
               </Typography>
             </Box>
             <Box flex={1} display="flex" justifyContent="center">
-              <Image alt="Teamwork" src={management} />
+              <Image alt="Management" src={management} />
             </Box>
           </Stack>
         </Container>
@@ -228,7 +228,7 @@ export default function Home(): ReactElement {
               </Typography>
             </Box>
             <Box flex={1} display="flex" justifyContent="center">
-              <Image alt="train" src={train} />
+              <Image alt="Train" src={train} />
             </Box>
           </Stack>
         </Container>
