@@ -1,12 +1,5 @@
 import { useQuery } from '@apollo/client'
-import {
-  Box,
-  Card,
-  Container,
-  Stack,
-  Typography,
-  useTheme,
-} from '@mui/material'
+import { Box, Card, Container, Stack, Typography } from '@mui/material'
 import { compact } from 'lodash'
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
@@ -29,7 +22,6 @@ const TeamsQueryDocument = graphql(`
 `)
 
 export default function Dashboard(): ReactElement {
-  const theme = useTheme()
   const { data: session } = useSession()
   const { data } = useQuery<TeamsQuery>(TeamsQueryDocument)
   const curHr = new Date().getHours()
