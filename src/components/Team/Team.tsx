@@ -15,11 +15,13 @@ const TeamQueryDocument = graphql(`
       id
       title
       contacts {
-        id
-        avatar
-        firstName
-        lastName
-        title
+        nodes {
+          id
+          avatar
+          firstName
+          lastName
+          title
+        }
       }
     }
   }

@@ -51,7 +51,6 @@ import {
   type ObjectiveTeamContactNamesAndObjectivesQuery,
   Status,
 } from '../../gql/graphql'
-import Avatar from '../Avatar'
 import SlideUp from '../SlideUp'
 
 const ObjectiveTeamContactNamesAndObjectivesQueryDocument = graphql(`
@@ -61,10 +60,11 @@ const ObjectiveTeamContactNamesAndObjectivesQueryDocument = graphql(`
       team {
         id
         contacts {
-          id
-          title
-          avatar
-          slug
+          nodes {
+            id
+            title
+            slug
+          }
         }
         objectives {
           id
@@ -183,27 +183,17 @@ export default function ObjectiveResultCreateDialog({
                   onChange={(_event, newValue) => {
                     setFieldValue('contactId', newValue?.id)
                   }}
-                  value={data?.objective.team.contacts.find(
-                    (contact) => contact.id === values.contactId
+                  value={data?.objective.team.contacts.nodes?.find(
+                    (contact) => contact?.id === values.contactId
                   )}
                   id="contactId"
                   isOptionEqualToValue={(option, value) =>
                     option.id === value.id
                   }
-                  options={compact(data?.objective.team.contacts)}
+                  options={compact(data?.objective.team.contacts?.nodes)}
                   getOptionLabel={({ title }) => title}
                   loading={loading}
                   fullWidth
-                  renderOption={(props, option) => (
-                    <Box component="li" {...props}>
-                      <Avatar
-                        src={option.avatar ?? undefined}
-                        title={option.title}
-                        sx={{ mr: 2, flexShrink: 0 }}
-                      />
-                      {option.title}
-                    </Box>
-                  )}
                   renderInput={(params) => (
                     <TextField
                       {...params}

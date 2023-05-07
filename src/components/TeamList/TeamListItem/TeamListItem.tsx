@@ -7,7 +7,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import { sortBy } from 'lodash'
+import { compact, sortBy } from 'lodash'
 import Link from 'next/link'
 import { type ReactElement } from 'react'
 
@@ -20,11 +20,14 @@ const TeamListItemTeamFragment = graphql(`
     id
     title
     slug
-    contacts {
-      id
-      title
-      avatar
-      status
+    contacts(first: 4) {
+      totalCount
+      nodes {
+        id
+        title
+        avatar
+        status
+      }
     }
   }
 `)
@@ -47,6 +50,7 @@ export default function TeamListItem({ team: refTeam }: Props): ReactElement {
               </Typography>
               <Divider>
                 <AvatarGroup
+                  total={team.contacts.totalCount}
                   sx={{
                     '.MuiAvatar-root': {
                       fontSize: 16,
@@ -54,11 +58,13 @@ export default function TeamListItem({ team: refTeam }: Props): ReactElement {
                     },
                   }}
                 >
-                  {sortBy(
-                    team.contacts.filter(
-                      ({ status }) => status === Status.Active
-                    ),
-                    'title'
+                  {compact(
+                    sortBy(
+                      team.contacts.nodes?.filter(
+                        (contact) => contact?.status === Status.Active
+                      ),
+                      'title'
+                    )
                   ).map(({ id, avatar, title }) => (
                     <Avatar key={id} title={title} src={avatar ?? undefined} />
                   ))}

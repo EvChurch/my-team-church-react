@@ -32,7 +32,6 @@ import {
   Status,
   type TeamContactNamesQuery,
 } from '../../gql/graphql'
-import Avatar from '../Avatar'
 import SlideUp from '../SlideUp'
 
 const TeamContactNamesQueryDocument = graphql(`
@@ -44,10 +43,11 @@ const TeamContactNamesQueryDocument = graphql(`
         definition
         slug
         contacts {
-          id
-          title
-          avatar
-          slug
+          nodes {
+            id
+            title
+            slug
+          }
         }
       }
     }
@@ -200,7 +200,7 @@ export default function ObjectiveCreateDialog({
                   value={
                     data?.teams.nodes
                       ?.find((team) => team?.id === values.teamId)
-                      ?.contacts.find(
+                      ?.contacts.nodes?.find(
                         (team) => team?.id === values.contactId
                       ) ?? null
                   }
@@ -211,21 +211,11 @@ export default function ObjectiveCreateDialog({
                   options={compact(
                     data?.teams.nodes?.find(
                       (team) => team?.id === values.teamId
-                    )?.contacts
+                    )?.contacts.nodes
                   )}
                   getOptionLabel={({ title }) => title}
                   loading={loading}
                   fullWidth
-                  renderOption={(props, option) => (
-                    <Box component="li" {...props}>
-                      <Avatar
-                        src={option.avatar ?? undefined}
-                        title={option.title}
-                        sx={{ mr: 2, flexShrink: 0 }}
-                      />
-                      {option.title}
-                    </Box>
-                  )}
                   renderInput={(params) => (
                     <TextField
                       {...params}
