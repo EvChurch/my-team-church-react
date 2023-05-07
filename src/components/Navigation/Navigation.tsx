@@ -1,3 +1,4 @@
+import { useQuery } from '@apollo/client'
 import Groups2RoundedIcon from '@mui/icons-material/Groups2Rounded'
 import InsightsRoundedIcon from '@mui/icons-material/InsightsRounded'
 import {
@@ -9,10 +10,13 @@ import {
   useMediaQuery,
 } from '@mui/material'
 import { type Theme, styled } from '@mui/material/styles'
+import { compact } from 'lodash'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { type ReactElement, useEffect } from 'react'
 
+import { graphql } from '../../gql'
+import { type NavigationTeamsQuery } from '../../gql/graphql'
 import Avatar from '../Avatar'
 import Logo from '../Logo'
 import Scrollbar from '../Scrollbar'
@@ -32,6 +36,18 @@ interface Props {
   onCloseNav?: () => void
 }
 
+const NavigationTeamsQueryDocument = graphql(`
+  query NavigationTeams {
+    teams(status: active) {
+      nodes {
+        id
+        title
+        slug
+      }
+    }
+  }
+`)
+
 export default function Navigation({
   openNav,
   onCloseNav,
@@ -39,6 +55,9 @@ export default function Navigation({
   const isDesktop = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'))
   const { pathname } = useRouter()
   const { data } = useSession()
+  const { data: navigationTeamsData } = useQuery<NavigationTeamsQuery>(
+    NavigationTeamsQueryDocument
+  )
 
   useEffect(() => {
     if (openNav === true) {
@@ -75,6 +94,14 @@ export default function Navigation({
             href="/teams"
             icon={<Groups2RoundedIcon />}
           />
+          {compact(navigationTeamsData?.teams.nodes).map((team) => (
+            <NavigationItem
+              key={team.id}
+              title={team.title}
+              href={`/teams/${team.slug}`}
+              sx={{ pl: 4 }}
+            />
+          ))}
         </List>
       </Box>
       <Box sx={{ flexGrow: 1 }} />

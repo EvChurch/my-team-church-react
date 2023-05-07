@@ -116,13 +116,21 @@ export default function ObjectiveDialog({
               sx={{ width: 20, height: 20, fontSize: '1rem' }}
             />
             <Typography variant="body2" noWrap>
-              {data?.objective.contact.title}
+              {loading ? (
+                <Skeleton width={50} />
+              ) : (
+                data?.objective.contact.title
+              )}
             </Typography>
           </Stack>
           <Stack direction="row" spacing={1} alignItems="center" flexGrow={1}>
             <CalendarTodayRoundedIcon sx={{ width: 20, height: 20 }} />
             <Typography variant="body2" noWrap>
-              {dayjs(data?.objective.dueAt).format('MMM D')}
+              {loading ? (
+                <Skeleton width={50} />
+              ) : (
+                dayjs(data?.objective.dueAt).format('MMM D')
+              )}
             </Typography>
           </Stack>
           <CircularProgressWithLabel value={data?.objective.percentage} />

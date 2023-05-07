@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
-import { Box, Container, Tab, Typography } from '@mui/material'
+import { Box, Container, Skeleton, Tab, Typography } from '@mui/material'
 import { type ReactElement, type SyntheticEvent, useState } from 'react'
 
 import { graphql } from '../../gql'
@@ -32,7 +32,9 @@ interface Props {
 }
 
 export default function Team({ id }: Props): ReactElement {
-  const { data } = useQuery<TeamQuery>(TeamQueryDocument, { variables: { id } })
+  const { data, loading } = useQuery<TeamQuery>(TeamQueryDocument, {
+    variables: { id },
+  })
   const [value, setValue] = useState('1')
 
   const handleChange = (_event: SyntheticEvent, newValue: string): void => {
@@ -42,7 +44,7 @@ export default function Team({ id }: Props): ReactElement {
   return (
     <Container maxWidth="xl">
       <Typography variant="h4" gutterBottom>
-        {data?.team.title}
+        {loading ? <Skeleton width="40%" /> : data?.team.title}
       </Typography>
       <Box sx={{ width: '100%', typography: 'body1' }}>
         <TabContext value={value}>

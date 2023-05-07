@@ -1,4 +1,9 @@
-import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
+import {
+  ListItemButton,
+  type ListItemButtonProps,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material'
 import { styled } from '@mui/material/styles'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -27,19 +32,27 @@ const StyledNavItemIcon = styled(ListItemIcon)({
   justifyContent: 'center',
 })
 
-interface Props {
+interface Props extends ListItemButtonProps {
   title: string
   href: string
-  icon: ReactNode
+  icon?: ReactNode
 }
 
-export default function NavItem({ title, href, icon }: Props): ReactElement {
-  const { pathname } = useRouter()
+export default function NavItem({
+  title,
+  href,
+  icon,
+  ...props
+}: Props): ReactElement {
+  const { asPath } = useRouter()
   return (
     <Link passHref href={href} legacyBehavior>
-      <StyledNavItem disableGutters selected={pathname.startsWith(href)}>
-        <StyledNavItemIcon>{icon}</StyledNavItemIcon>
-        <ListItemText disableTypography primary={title} />
+      <StyledNavItem disableGutters selected={asPath === href} {...props}>
+        {icon != null && <StyledNavItemIcon>{icon}</StyledNavItemIcon>}
+        <ListItemText
+          primary={title}
+          primaryTypographyProps={{ noWrap: true }}
+        />
       </StyledNavItem>
     </Link>
   )
