@@ -57,11 +57,13 @@ const ObjectiveDeleteMutationDocument = graphql(`
 interface Props {
   objective: FragmentType<typeof ObjectiveListItemObjectiveFragment>
   refetch?: () => void
+  divider?: boolean
 }
 
 export default function ObjectiveListItem({
   objective: refObjective,
   refetch,
+  divider,
 }: Props): ReactElement {
   const [open, setOpen] = useState(false)
   const objective = useFragment(
@@ -92,8 +94,8 @@ export default function ObjectiveListItem({
         }}
         id={objective.id}
       />
-      <Card>
-        <CardContent sx={{ display: { xs: 'none', sm: 'block' } }}>
+      <Card sx={{ display: { xs: 'none', sm: 'block' } }}>
+        <CardContent>
           <Stack direction="row">
             <Stack flexGrow={1}>
               <Typography sx={{ fontWeight: 'bold' }} gutterBottom>
@@ -153,63 +155,66 @@ export default function ObjectiveListItem({
             </Stack>
           </Stack>
         </CardContent>
-        <CardContent sx={{ display: { xs: 'block', sm: 'none' } }}>
-          <Stack
-            direction="row"
-            alignItems="center"
-            sx={{ minWidth: 0 }}
-            spacing={1}
-          >
-            <ProgressLabel value={objective.progress} noText />
-            <Typography sx={{ fontWeight: 'bold', flex: 1 }} noWrap>
-              <Link
-                onClick={() => {
-                  setOpen(true)
-                }}
-                color="textPrimary"
-                underline="none"
-                sx={{
-                  cursor: 'pointer',
-                  '&:hover': { color: 'primary.main' },
-                }}
-              >
-                {objective.title}
-              </Link>
-            </Typography>
-            <Box display="flex" alignItems="center">
-              <IconButton
-                aria-label="more"
-                id={`${objective.id}-menu-button`}
-                aria-controls={menuOpen ? `${objective.id}-menu` : undefined}
-                aria-expanded={menuOpen ? 'true' : undefined}
-                aria-haspopup="true"
-                onClick={handleMenuClick}
-              >
-                <MoreVertRoundedIcon />
-              </IconButton>
-            </Box>
-          </Stack>
-          <Stack direction="row" spacing={1} alignItems="center" sx={{ pt: 2 }}>
-            <Avatar
-              src={objective.contact.avatar ?? undefined}
-              title={objective.contact.title}
-              sx={{ width: 20, height: 20, fontSize: '1rem' }}
-            />
-            <Typography variant="body2">{objective.contact.title}</Typography>
-            <CalendarTodayRoundedIcon sx={{ width: 20, height: 20 }} />
-            <Typography variant="body2">
-              {dayjs(objective.dueAt).format('MMM D')}
-            </Typography>
-            <ShowChartRoundedIcon
-              htmlColor="rgb(5 169 244)"
-              sx={{ width: 20, height: 20 }}
-            />
-            <Typography variant="body2">
-              {`${Math.round(objective.percentage ?? 0)}%`}
-            </Typography>
-          </Stack>
-        </CardContent>
       </Card>
+      <Box sx={{ display: { xs: 'block', sm: 'none' }, p: 2 }}>
+        <Stack
+          direction="row"
+          alignItems="center"
+          sx={{ minWidth: 0 }}
+          spacing={1}
+        >
+          <ProgressLabel value={objective.progress} noText />
+          <Typography sx={{ fontWeight: 'bold', flex: 1 }} noWrap>
+            <Link
+              onClick={() => {
+                setOpen(true)
+              }}
+              color="textPrimary"
+              underline="none"
+              sx={{
+                cursor: 'pointer',
+                '&:hover': { color: 'primary.main' },
+              }}
+            >
+              {objective.title}
+            </Link>
+          </Typography>
+          <Box display="flex" alignItems="center">
+            <IconButton
+              aria-label="more"
+              id={`${objective.id}-menu-button`}
+              aria-controls={menuOpen ? `${objective.id}-menu` : undefined}
+              aria-expanded={menuOpen ? 'true' : undefined}
+              aria-haspopup="true"
+              onClick={handleMenuClick}
+            >
+              <MoreVertRoundedIcon />
+            </IconButton>
+          </Box>
+        </Stack>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Avatar
+            src={objective.contact.avatar ?? undefined}
+            title={objective.contact.title}
+            sx={{ width: 20, height: 20, fontSize: '1rem' }}
+          />
+          <Typography variant="body2">{objective.contact.title}</Typography>
+          <CalendarTodayRoundedIcon sx={{ width: 20, height: 20 }} />
+          <Typography variant="body2">
+            {dayjs(objective.dueAt).format('MMM D')}
+          </Typography>
+          <ShowChartRoundedIcon
+            htmlColor="rgb(5 169 244)"
+            sx={{ width: 20, height: 20 }}
+          />
+          <Typography variant="body2">
+            {`${Math.round(objective.percentage ?? 0)}%`}
+          </Typography>
+        </Stack>
+      </Box>
+      {divider === true && (
+        <Divider sx={{ display: { xs: 'block', sm: 'none' } }} />
+      )}
       <Menu
         id={`${objective.id}-menu`}
         MenuListProps={{

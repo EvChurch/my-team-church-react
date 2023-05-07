@@ -3,7 +3,6 @@ import { startCase } from 'lodash'
 import { type ReactElement } from 'react'
 
 import { type FragmentType, graphql, useFragment } from '../../gql'
-import { Status } from '../../gql/graphql'
 
 import TeamListItem from './TeamListItem'
 
@@ -19,27 +18,21 @@ const TeamListTeamFragment = graphql(`
 
 interface Props {
   teams: Array<FragmentType<typeof TeamListTeamFragment>>
-  status?: Status
 }
 
 type Mutable<Type> = {
   -readonly [Key in keyof Type]: Type[Key]
 }
 
-export default function TeamList({
-  teams: refTeams,
-  status = Status.Active,
-}: Props): ReactElement {
+export default function TeamList({ teams: refTeams }: Props): ReactElement {
   const teams = useFragment(TeamListTeamFragment, refTeams)
-  const sortedTeams = teams
-    .filter((team) => team.status === status)
-    .sort((a, b) => {
-      const titleA = `${a.definition.toUpperCase()} ${a.title.toUpperCase()}`
-      const titleB = `${b.definition.toUpperCase()} ${b.title.toUpperCase()}`
-      if (titleA < titleB) return -1
-      if (titleA > titleB) return 1
-      return 0
-    })
+  const sortedTeams = teams.concat().sort((a, b) => {
+    const titleA = `${a.definition.toUpperCase()} ${a.title.toUpperCase()}`
+    const titleB = `${b.definition.toUpperCase()} ${b.title.toUpperCase()}`
+    if (titleA < titleB) return -1
+    if (titleA > titleB) return 1
+    return 0
+  })
   const teamsByDefinition = sortedTeams.reduce<
     Record<string, Mutable<typeof teams>>
   >((result, team) => {

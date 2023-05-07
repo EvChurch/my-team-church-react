@@ -118,14 +118,15 @@ export default function ObjectiveList({
         {!loading &&
           data?.objectives.nodes != null &&
           data?.objectives.nodes?.length > 0 && (
-            <Stack spacing={2} p={2}>
-              {compact(data?.objectives.nodes).map((objective) => (
+            <Stack spacing={{ xs: 0, sm: 2 }} p={{ xs: 0, sm: 2 }}>
+              {compact(data?.objectives.nodes).map((objective, index) => (
                 <ObjectiveListItem
                   key={objective.id}
                   objective={objective}
                   refetch={() => {
                     void refetch()
                   }}
+                  divider={(data?.objectives.nodes?.length ?? 0) - 1 !== index}
                 />
               ))}
             </Stack>

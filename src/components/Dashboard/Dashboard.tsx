@@ -13,7 +13,7 @@ import TeamList from '../TeamList'
 
 const TeamsQueryDocument = graphql(`
   query Teams {
-    teams {
+    teams(status: active) {
       nodes {
         ...TeamListTeamFragment
       }
