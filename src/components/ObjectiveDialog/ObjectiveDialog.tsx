@@ -7,6 +7,7 @@ import {
   DialogContent,
   Divider,
   IconButton,
+  Skeleton,
   Stack,
   Typography,
   useMediaQuery,
@@ -59,7 +60,7 @@ export default function ObjectiveDialog({
   onClose,
   id,
 }: Props): ReactElement {
-  const [loadObjective, { data }] = useLazyQuery<ObjectiveQuery>(
+  const [loadObjective, { data, loading }] = useLazyQuery<ObjectiveQuery>(
     ObjectiveQueryDocument
   )
   const theme = useTheme()
@@ -90,10 +91,10 @@ export default function ObjectiveDialog({
         <FlagRoundedIcon />
         <Stack flex={1}>
           <Typography variant="h6" noWrap>
-            {data?.objective.title}
+            {loading ? <Skeleton width={100} /> : data?.objective.title}
           </Typography>
           <Typography variant="body2" noWrap>
-            {data?.objective.team.title}
+            {loading ? <Skeleton width={150} /> : data?.objective.team.title}
           </Typography>
         </Stack>
         <Divider orientation="vertical" flexItem />

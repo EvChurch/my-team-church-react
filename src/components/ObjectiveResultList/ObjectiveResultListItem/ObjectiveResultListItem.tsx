@@ -64,11 +64,13 @@ const ObjectiveResultDeleteMutationDocument = graphql(`
 interface Props {
   result: FragmentType<typeof ObjectiveResultListItemObjectiveResultFragment>
   refetch?: () => void
+  divider?: boolean
 }
 
 export default function ObjectiveResultListItem({
   result: refResult,
   refetch,
+  divider,
 }: Props): ReactElement {
   const [open, setOpen] = useState(false)
   const result = useFragment(
@@ -100,7 +102,12 @@ export default function ObjectiveResultListItem({
         }}
         result={result}
       />
-      <Stack direction="row" alignItems="center" spacing={2}>
+      <Stack
+        direction="row"
+        alignItems="center"
+        spacing={2}
+        sx={{ display: { xs: 'none', sm: 'flex' }, p: 2 }}
+      >
         {result.kind === ObjectiveResultKind.KeyResult && (
           <Tooltip title="Key Result">
             <ShowChartRoundedIcon htmlColor="rgb(5 169 244)" />
@@ -149,47 +156,92 @@ export default function ObjectiveResultListItem({
             <MoreVertRoundedIcon />
           </IconButton>
         </Box>
-        <Menu
-          id={`${result.id}-menu`}
-          MenuListProps={{
-            'aria-labelledby': `${result.id}-menu-button`,
-            dense: true,
-          }}
-          anchorEl={menuAnchorEl}
-          open={menuOpen}
-          onClose={handleMenuClose}
-          transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-        >
-          <MenuItem
-            onClick={() => {
-              setOpen(true)
-              handleMenuClose()
-            }}
-          >
-            <ListItemIcon>
-              <PostAddRoundedIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Update Progress</ListItemText>
-          </MenuItem>
-          <Divider />
-          <MenuItem
-            onClick={() => {
-              handleMenuClose()
-              void objectiveResultDelete({
-                onCompleted() {
-                  refetch?.()
-                },
-              })
-            }}
-          >
-            <ListItemIcon>
-              <DeleteRoundedIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Delete</ListItemText>
-          </MenuItem>
-        </Menu>
       </Stack>
+      <Box sx={{ display: { xs: 'block', sm: 'none' }, p: 2 }}>
+        <Stack direction="row" alignItems="center" spacing={2}>
+          {result.kind === ObjectiveResultKind.KeyResult && (
+            <Tooltip title="Key Result">
+              <ShowChartRoundedIcon htmlColor="rgb(5 169 244)" />
+            </Tooltip>
+          )}
+          {result.kind === ObjectiveResultKind.Initiative && (
+            <Tooltip title="Initiative">
+              <PlaylistAddCheckRoundedIcon htmlColor="rgb(55 213 146)" />
+            </Tooltip>
+          )}
+          <Typography sx={{ fontWeight: 'bold', flexGrow: 1 }} noWrap>
+            <Link
+              color="textPrimary"
+              underline="none"
+              sx={{ cursor: 'pointer', '&:hover': { color: 'primary.main' } }}
+            >
+              {result.title}
+            </Link>
+          </Typography>
+          <Box display="flex" alignItems="center">
+            <IconButton
+              aria-label="more"
+              id={`${result.id}-menu-button`}
+              aria-controls={menuOpen ? `${result.id}-menu` : undefined}
+              aria-expanded={menuOpen ? 'true' : undefined}
+              aria-haspopup="true"
+              onClick={handleMenuClick}
+            >
+              <MoreVertRoundedIcon />
+            </IconButton>
+          </Box>
+        </Stack>
+        <Stack direction="row" spacing={1} alignItems="center" ml="28px">
+          <Avatar
+            src={result.contact.avatar ?? undefined}
+            title={result.contact.title}
+            sx={{ width: 20, height: 20, fontSize: '1rem' }}
+          />
+          <Typography variant="body2">{result.contact.title}</Typography>
+          <CircularProgressWithLabel value={result.percentage} />
+        </Stack>
+      </Box>
+      {divider === true && <Divider />}
+      <Menu
+        id={`${result.id}-menu`}
+        MenuListProps={{
+          'aria-labelledby': `${result.id}-menu-button`,
+          dense: true,
+        }}
+        anchorEl={menuAnchorEl}
+        open={menuOpen}
+        onClose={handleMenuClose}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+        <MenuItem
+          onClick={() => {
+            setOpen(true)
+            handleMenuClose()
+          }}
+        >
+          <ListItemIcon>
+            <PostAddRoundedIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Update Progress</ListItemText>
+        </MenuItem>
+        <Divider />
+        <MenuItem
+          onClick={() => {
+            handleMenuClose()
+            void objectiveResultDelete({
+              onCompleted() {
+                refetch?.()
+              },
+            })
+          }}
+        >
+          <ListItemIcon>
+            <DeleteRoundedIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Delete</ListItemText>
+        </MenuItem>
+      </Menu>
     </>
   )
 }

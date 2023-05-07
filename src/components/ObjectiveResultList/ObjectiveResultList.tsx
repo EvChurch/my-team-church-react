@@ -115,14 +115,17 @@ export default function ObjectiveResultList({
         {!loading &&
           data?.objectiveResults.nodes != null &&
           data?.objectiveResults.nodes?.length > 0 && (
-            <Stack spacing={2} p={2}>
-              {compact(data?.objectiveResults.nodes).map((result) => (
+            <Stack>
+              {compact(data?.objectiveResults.nodes).map((result, index) => (
                 <ObjectiveResultListItem
                   key={result.id}
                   result={result}
                   refetch={() => {
                     void refetch()
                   }}
+                  divider={
+                    (data?.objectiveResults.nodes?.length ?? 0) - 1 !== index
+                  }
                 />
               ))}
             </Stack>

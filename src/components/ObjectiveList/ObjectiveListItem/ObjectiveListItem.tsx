@@ -2,7 +2,6 @@ import { useMutation } from '@apollo/client'
 import CalendarTodayRoundedIcon from '@mui/icons-material/CalendarTodayRounded'
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded'
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded'
-import ShowChartRoundedIcon from '@mui/icons-material/ShowChartRounded'
 import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded'
 import {
   Box,
@@ -163,7 +162,10 @@ export default function ObjectiveListItem({
           sx={{ minWidth: 0 }}
           spacing={1}
         >
-          <ProgressLabel value={objective.progress} noText />
+          <ProgressLabel
+            value={objective.progress}
+            labelProps={{ display: 'none' }}
+          />
           <Typography sx={{ fontWeight: 'bold', flex: 1 }} noWrap>
             <Link
               onClick={() => {
@@ -192,7 +194,7 @@ export default function ObjectiveListItem({
             </IconButton>
           </Box>
         </Stack>
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack direction="row" spacing={1} alignItems="center" ml={4}>
           <Avatar
             src={objective.contact.avatar ?? undefined}
             title={objective.contact.title}
@@ -203,13 +205,7 @@ export default function ObjectiveListItem({
           <Typography variant="body2">
             {dayjs(objective.dueAt).format('MMM D')}
           </Typography>
-          <ShowChartRoundedIcon
-            htmlColor="rgb(5 169 244)"
-            sx={{ width: 20, height: 20 }}
-          />
-          <Typography variant="body2">
-            {`${Math.round(objective.percentage ?? 0)}%`}
-          </Typography>
+          <CircularProgressWithLabel value={objective.percentage} />
         </Stack>
       </Box>
       {divider === true && (
