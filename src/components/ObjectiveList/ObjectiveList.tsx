@@ -77,7 +77,7 @@ export default function ObjectiveList({
         <Stack direction="row">
           <Box flexGrow={1}>
             <TabContext value={status}>
-              <TabList onChange={handleChange} aria-label="team tabs">
+              <TabList onChange={handleChange} aria-label="status tabs">
                 <Tab label="Active" value={Status.Active} />
                 <Tab label="Draft" value={Status.Draft} />
                 <Tab label="Closed" value={Status.Archived} />

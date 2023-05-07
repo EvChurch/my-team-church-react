@@ -14,7 +14,6 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n            mutation UserLogin($input: UserLoginMutationInput!) {\n              userLogin(input: $input) {\n                apiToken: token\n                expiresAt\n                user {\n                  id\n                  title\n                  firstName\n                  lastName\n                  email\n                  phoneNumber\n                  remoteId\n                  avatar\n                  contacts {\n                    id\n                  }\n                }\n              }\n            }\n          ": types.UserLoginDocument,
-    "\n  query Teams {\n    teams(status: active) {\n      nodes {\n        ...TeamListTeamFragment\n      }\n    }\n  }\n": types.TeamsDocument,
     "\n  query NavigationTeams {\n    teams(status: active) {\n      nodes {\n        id\n        title\n        slug\n      }\n    }\n  }\n": types.NavigationTeamsDocument,
     "\n  fragment ObjectiveActivityCreateDialogResultFragment on ObjectiveResult {\n    id\n    progress\n    measurement\n    targetValue\n    currentValue\n    startValue\n  }\n": types.ObjectiveActivityCreateDialogResultFragmentFragmentDoc,
     "\n  mutation ObjectiveActivityCreate($input: ObjectiveActivityInput!) {\n    objectiveActivityCreate(input: { activity: $input }) {\n      activity {\n        id\n        result {\n          id\n          progress\n          percentage\n          currentValue\n          objective {\n            id\n            progress\n            percentage\n          }\n        }\n      }\n    }\n  }\n": types.ObjectiveActivityCreateDocument,
@@ -32,8 +31,8 @@ const documents = {
     "\n  mutation ObjectiveResultDelete($id: ID!) {\n    objectiveResultDelete(input: { id: $id }) {\n      id\n    }\n  }\n": types.ObjectiveResultDeleteDocument,
     "\n  query Members($teamId: ID!) {\n    contacts(teamId: $teamId) {\n      nodes {\n        id\n        avatar\n        firstName\n        lastName\n        title\n      }\n    }\n  }\n": types.MembersDocument,
     "\n  query Team($id: ID!) {\n    team(id: $id) {\n      id\n      title\n      contacts {\n        nodes {\n          id\n          avatar\n          firstName\n          lastName\n          title\n        }\n      }\n    }\n  }\n": types.TeamDocument,
-    "\n  fragment TeamListTeamFragment on Team {\n    id\n    title\n    status\n    definition\n    ...TeamListItemTeamFragment\n  }\n": types.TeamListTeamFragmentFragmentDoc,
-    "\n  fragment TeamListItemTeamFragment on Team {\n    id\n    title\n    slug\n    contacts(first: 4) {\n      totalCount\n      nodes {\n        id\n        title\n        avatar\n        status\n      }\n    }\n  }\n": types.TeamListItemTeamFragmentFragmentDoc,
+    "\n  query Teams($status: Status) {\n    teams(status: $status) {\n      nodes {\n        id\n        title\n        status\n        definition\n        ...TeamListItemTeamFragment\n      }\n    }\n  }\n": types.TeamsDocument,
+    "\n  fragment TeamListItemTeamFragment on Team {\n    id\n    title\n    slug\n    contacts(first: 4) {\n      totalCount\n    }\n  }\n": types.TeamListItemTeamFragmentFragmentDoc,
 };
 
 /**
@@ -54,10 +53,6 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n            mutation UserLogin($input: UserLoginMutationInput!) {\n              userLogin(input: $input) {\n                apiToken: token\n                expiresAt\n                user {\n                  id\n                  title\n                  firstName\n                  lastName\n                  email\n                  phoneNumber\n                  remoteId\n                  avatar\n                  contacts {\n                    id\n                  }\n                }\n              }\n            }\n          "): (typeof documents)["\n            mutation UserLogin($input: UserLoginMutationInput!) {\n              userLogin(input: $input) {\n                apiToken: token\n                expiresAt\n                user {\n                  id\n                  title\n                  firstName\n                  lastName\n                  email\n                  phoneNumber\n                  remoteId\n                  avatar\n                  contacts {\n                    id\n                  }\n                }\n              }\n            }\n          "];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  query Teams {\n    teams(status: active) {\n      nodes {\n        ...TeamListTeamFragment\n      }\n    }\n  }\n"): (typeof documents)["\n  query Teams {\n    teams(status: active) {\n      nodes {\n        ...TeamListTeamFragment\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -129,11 +124,11 @@ export function graphql(source: "\n  query Team($id: ID!) {\n    team(id: $id) {
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment TeamListTeamFragment on Team {\n    id\n    title\n    status\n    definition\n    ...TeamListItemTeamFragment\n  }\n"): (typeof documents)["\n  fragment TeamListTeamFragment on Team {\n    id\n    title\n    status\n    definition\n    ...TeamListItemTeamFragment\n  }\n"];
+export function graphql(source: "\n  query Teams($status: Status) {\n    teams(status: $status) {\n      nodes {\n        id\n        title\n        status\n        definition\n        ...TeamListItemTeamFragment\n      }\n    }\n  }\n"): (typeof documents)["\n  query Teams($status: Status) {\n    teams(status: $status) {\n      nodes {\n        id\n        title\n        status\n        definition\n        ...TeamListItemTeamFragment\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment TeamListItemTeamFragment on Team {\n    id\n    title\n    slug\n    contacts(first: 4) {\n      totalCount\n      nodes {\n        id\n        title\n        avatar\n        status\n      }\n    }\n  }\n"): (typeof documents)["\n  fragment TeamListItemTeamFragment on Team {\n    id\n    title\n    slug\n    contacts(first: 4) {\n      totalCount\n      nodes {\n        id\n        title\n        avatar\n        status\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  fragment TeamListItemTeamFragment on Team {\n    id\n    title\n    slug\n    contacts(first: 4) {\n      totalCount\n    }\n  }\n"): (typeof documents)["\n  fragment TeamListItemTeamFragment on Team {\n    id\n    title\n    slug\n    contacts(first: 4) {\n      totalCount\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
