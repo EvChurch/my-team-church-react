@@ -137,8 +137,8 @@ export default function ObjectiveListItem({
               alignItems="center"
               spacing={2}
             >
-              <CircularProgressWithLabel value={objective.percentage} />
               <ProgressLabel value={objective.progress} />
+              <CircularProgressWithLabel value={objective.percentage} />
               <Box display="flex" alignItems="center">
                 <IconButton
                   aria-label="more"

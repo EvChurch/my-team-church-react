@@ -132,11 +132,11 @@ export default function ObjectiveResultListItem({
             {result.title}
           </Link>
         </Typography>
-        <CircularProgressWithLabel value={result.percentage} />
         <ProgressLabel
           value={result.progress}
           labelProps={{ display: { xs: 'none', sm: 'block' } }}
         />
+        <CircularProgressWithLabel value={result.percentage} />
         <IconButton
           onClick={() => {
             setOpen(true)

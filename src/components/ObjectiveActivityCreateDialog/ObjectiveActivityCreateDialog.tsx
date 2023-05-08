@@ -61,6 +61,11 @@ const ObjectiveActivityCreateMutationDocument = graphql(`
             id
             progress
             percentage
+            team {
+              id
+              progress
+              percentage
+            }
           }
         }
       }

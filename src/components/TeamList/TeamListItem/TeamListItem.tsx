@@ -19,12 +19,16 @@ import NextLink from 'next/link'
 import { type MouseEvent, type ReactElement, useState } from 'react'
 
 import { type FragmentType, graphql, useFragment } from '../../../gql'
+import CircularProgressWithLabel from '../../CircularProgressWithLabel'
+import ProgressLabel from '../../ProgressLabel'
 
 const TeamListItemTeamFragment = graphql(`
   fragment TeamListItemTeamFragment on Team {
     id
     title
     slug
+    percentage
+    progress
     contacts(first: 4) {
       totalCount
     }
@@ -77,7 +81,9 @@ export default function TeamListItem({
                 </Typography>
               </Stack>
             </Stack>
-            <Box display="flex" alignItems="center">
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <ProgressLabel value={team.progress} />
+              <CircularProgressWithLabel value={team.percentage} />
               <IconButton
                 aria-label="more"
                 id={`${team.id}-menu-button`}
@@ -88,7 +94,7 @@ export default function TeamListItem({
               >
                 <MoreVertRoundedIcon />
               </IconButton>
-            </Box>
+            </Stack>
           </Stack>
         </CardContent>
       </Card>
@@ -99,6 +105,10 @@ export default function TeamListItem({
           sx={{ minWidth: 0 }}
           spacing={1}
         >
+          <ProgressLabel
+            value={team.progress}
+            labelProps={{ display: 'none' }}
+          />
           <Typography sx={{ fontWeight: 'bold', flex: 1 }} noWrap>
             <NextLink href={`/teams/${team.slug}`} passHref legacyBehavior>
               <Link
@@ -126,11 +136,12 @@ export default function TeamListItem({
             </IconButton>
           </Box>
         </Stack>
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack direction="row" spacing={1} alignItems="center" ml={4}>
           <GroupsRoundedIcon sx={{ width: 20, height: 20 }} />
           <Typography variant="body2">
             {team.contacts.totalCount} members
           </Typography>
+          <CircularProgressWithLabel value={team.percentage} />
         </Stack>
       </Box>
       {divider === true && (
