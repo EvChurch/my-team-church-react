@@ -1,5 +1,12 @@
 import LoginRoundedIcon from '@mui/icons-material/LoginRounded'
-import { Box, Button, Container, Stack, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  Container,
+  Divider,
+  Stack,
+  Typography,
+} from '@mui/material'
 import Image from 'next/image'
 import Link from 'next/link'
 import { type ReactElement } from 'react'
@@ -9,6 +16,7 @@ import train from '../../../public/images/illustrations/illustration_3.svg'
 import teamwork from '../../../public/images/illustrations/illustration_4.svg'
 import centralized from '../../../public/images/illustrations/illustration_5.svg'
 import pathways from '../../../public/images/illustrations/illustration_9.svg'
+import EarlyAccess from '../EarlyAccess'
 import Logo from '../Logo'
 
 export default function Home(): ReactElement {
@@ -29,7 +37,6 @@ export default function Home(): ReactElement {
           </Box>
         </Container>
       </Box>
-
       <Box component="section" py={20} bgcolor="primary.main">
         <Container>
           <Stack
@@ -67,6 +74,12 @@ export default function Home(): ReactElement {
           </Stack>
         </Container>
       </Box>
+      <Box component="section" py={10}>
+        <Container maxWidth="xs">
+          <EarlyAccess />
+        </Container>
+      </Box>
+      <Divider />
       <Box component="section" py={5}>
         <Container>
           <Stack
@@ -231,6 +244,14 @@ export default function Home(): ReactElement {
               <Image alt="Train" src={train} />
             </Box>
           </Stack>
+        </Container>
+      </Box>
+      <Box bgcolor="primary.dark" py={2} textAlign="center">
+        <Container>
+          <Typography color="white">
+            Copyright © {new Date().getFullYear()} Auckland Evangelical Church
+            Trust
+          </Typography>
         </Container>
       </Box>
     </>
