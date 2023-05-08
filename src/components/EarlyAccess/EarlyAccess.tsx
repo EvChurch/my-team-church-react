@@ -62,8 +62,9 @@ export default function EarlyAccess(): ReactElement {
               setJoined(true)
             } catch (error) {
               if (
+                error instanceof Error &&
                 error.message ===
-                'Validation failed: Email address has already been taken.'
+                  'Validation failed: Email address has already been taken.'
               ) {
                 formikHelpers.setFieldError(
                   'emailAddress',
