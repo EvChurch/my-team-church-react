@@ -31,7 +31,10 @@ const documents = {
     "\n  fragment ObjectiveResultListItemObjectiveResultFragment on ObjectiveResult {\n    contact {\n      id\n      avatar\n      title\n    }\n    createdAt\n    dueAt\n    id\n    status\n    title\n    updatedAt\n    percentage\n    progress\n    kind\n    objective {\n      id\n    }\n    ...ObjectiveActivityCreateDialogResultFragment\n  }\n": types.ObjectiveResultListItemObjectiveResultFragmentFragmentDoc,
     "\n  mutation ObjectiveResultDelete($id: ID!) {\n    objectiveResultDelete(input: { id: $id }) {\n      id\n    }\n  }\n": types.ObjectiveResultDeleteDocument,
     "\n  query Members($teamId: ID!) {\n    contacts(teamId: $teamId) {\n      nodes {\n        id\n        avatar\n        firstName\n        lastName\n        title\n      }\n    }\n  }\n": types.MembersDocument,
-    "\n  query Team($id: ID!) {\n    team(id: $id) {\n      id\n      title\n      contacts {\n        nodes {\n          id\n          avatar\n          firstName\n          lastName\n          title\n        }\n      }\n    }\n  }\n": types.TeamDocument,
+    "\n  query TeamPositions($teamId: ID!) {\n    positions: teamPositions(teamId: $teamId) {\n      nodes {\n        id\n        ...TeamPositionListItemPositionFragment\n      }\n    }\n  }\n": types.TeamPositionsDocument,
+    "\n  fragment TeamPositionListItemAssignmentListItemAssignmentFragment on Assignment {\n    id\n    progress\n    contact {\n      id\n      avatar\n      title\n    }\n    createdAt\n    updatedAt\n  }\n": types.TeamPositionListItemAssignmentListItemAssignmentFragmentFragmentDoc,
+    "\n  fragment TeamPositionListItemPositionFragment on Position {\n    assignmentsCount\n    assignments {\n      nodes {\n        id\n        ...TeamPositionListItemAssignmentListItemAssignmentFragment\n      }\n    }\n    createdAt\n    exclude\n    id\n    progress\n    remoteId\n    requiredAssignmentsCount\n    reporter\n    slug\n    title\n    updatedAt\n  }\n": types.TeamPositionListItemPositionFragmentFragmentDoc,
+    "\n  query Team($id: ID!) {\n    team(id: $id) {\n      id\n      title\n    }\n  }\n": types.TeamDocument,
     "\n  query Teams($status: Status) {\n    teams(status: $status) {\n      nodes {\n        id\n        title\n        status\n        definition\n        ...TeamListItemTeamFragment\n      }\n    }\n  }\n": types.TeamsDocument,
     "\n  fragment TeamListItemTeamFragment on Team {\n    id\n    title\n    slug\n    percentage\n    progress\n    contacts(first: 4) {\n      totalCount\n    }\n  }\n": types.TeamListItemTeamFragmentFragmentDoc,
 };
@@ -125,7 +128,19 @@ export function graphql(source: "\n  query Members($teamId: ID!) {\n    contacts
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query Team($id: ID!) {\n    team(id: $id) {\n      id\n      title\n      contacts {\n        nodes {\n          id\n          avatar\n          firstName\n          lastName\n          title\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query Team($id: ID!) {\n    team(id: $id) {\n      id\n      title\n      contacts {\n        nodes {\n          id\n          avatar\n          firstName\n          lastName\n          title\n        }\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  query TeamPositions($teamId: ID!) {\n    positions: teamPositions(teamId: $teamId) {\n      nodes {\n        id\n        ...TeamPositionListItemPositionFragment\n      }\n    }\n  }\n"): (typeof documents)["\n  query TeamPositions($teamId: ID!) {\n    positions: teamPositions(teamId: $teamId) {\n      nodes {\n        id\n        ...TeamPositionListItemPositionFragment\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment TeamPositionListItemAssignmentListItemAssignmentFragment on Assignment {\n    id\n    progress\n    contact {\n      id\n      avatar\n      title\n    }\n    createdAt\n    updatedAt\n  }\n"): (typeof documents)["\n  fragment TeamPositionListItemAssignmentListItemAssignmentFragment on Assignment {\n    id\n    progress\n    contact {\n      id\n      avatar\n      title\n    }\n    createdAt\n    updatedAt\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment TeamPositionListItemPositionFragment on Position {\n    assignmentsCount\n    assignments {\n      nodes {\n        id\n        ...TeamPositionListItemAssignmentListItemAssignmentFragment\n      }\n    }\n    createdAt\n    exclude\n    id\n    progress\n    remoteId\n    requiredAssignmentsCount\n    reporter\n    slug\n    title\n    updatedAt\n  }\n"): (typeof documents)["\n  fragment TeamPositionListItemPositionFragment on Position {\n    assignmentsCount\n    assignments {\n      nodes {\n        id\n        ...TeamPositionListItemAssignmentListItemAssignmentFragment\n      }\n    }\n    createdAt\n    exclude\n    id\n    progress\n    remoteId\n    requiredAssignmentsCount\n    reporter\n    slug\n    title\n    updatedAt\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query Team($id: ID!) {\n    team(id: $id) {\n      id\n      title\n    }\n  }\n"): (typeof documents)["\n  query Team($id: ID!) {\n    team(id: $id) {\n      id\n      title\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

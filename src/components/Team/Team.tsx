@@ -8,21 +8,13 @@ import { type TeamQuery } from '../../gql/graphql'
 import ObjectiveList from '../ObjectiveList'
 
 import MemberList from './MemberList'
+import PositionList from './PositionList'
 
 const TeamQueryDocument = graphql(`
   query Team($id: ID!) {
     team(id: $id) {
       id
       title
-      contacts {
-        nodes {
-          id
-          avatar
-          firstName
-          lastName
-          title
-        }
-      }
     }
   }
 `)
@@ -52,13 +44,17 @@ export default function Team({ id }: Props): ReactElement {
             <TabList onChange={handleChange} aria-label="team tabs">
               <Tab label="Goals" value="1" />
               <Tab label="Members" value="2" />
+              <Tab label="Positions" value="3" />
             </TabList>
           </Box>
           <TabPanel value="1">
-            <ObjectiveList teamId={data?.team.id} />
+            <ObjectiveList teamId={id} />
           </TabPanel>
           <TabPanel value="2">
-            <MemberList teamId={data?.team.id ?? id} />
+            <MemberList teamId={id} />
+          </TabPanel>
+          <TabPanel value="3">
+            <PositionList teamId={id} />
           </TabPanel>
         </TabContext>
       </Box>
